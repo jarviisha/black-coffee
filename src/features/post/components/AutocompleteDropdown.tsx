@@ -9,14 +9,18 @@ interface AutocompleteDropdownProps {
   onSelect: (item: SuggestionItem) => void
 }
 
-export function AutocompleteDropdown({ suggestion, suggestions, onSelect }: AutocompleteDropdownProps) {
+export function AutocompleteDropdown({
+  suggestion,
+  suggestions,
+  onSelect,
+}: AutocompleteDropdownProps) {
   if (suggestions.length === 0) return null
 
   return (
     <div
       role="listbox"
       style={{ top: suggestion.dropdownPos.top, left: suggestion.dropdownPos.left }}
-      className="border-border bg-surface absolute z-20 min-w-40 max-w-56 overflow-hidden rounded border shadow-lg"
+      className="border-border bg-surface absolute z-20 max-w-56 min-w-40 overflow-hidden rounded border shadow-lg"
     >
       {suggestions.map((s, i) => (
         <button

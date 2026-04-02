@@ -7,9 +7,19 @@ import type { CreatePostInput } from "../schemas"
 
 // Typography props to mirror from textarea to measurement div
 const MIRROR_STYLE_PROPS = [
-  "fontFamily", "fontSize", "fontWeight", "lineHeight", "letterSpacing",
-  "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
-  "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth",
+  "fontFamily",
+  "fontSize",
+  "fontWeight",
+  "lineHeight",
+  "letterSpacing",
+  "paddingTop",
+  "paddingRight",
+  "paddingBottom",
+  "paddingLeft",
+  "borderTopWidth",
+  "borderRightWidth",
+  "borderBottomWidth",
+  "borderLeftWidth",
   "boxSizing",
 ] as const
 
@@ -81,47 +91,50 @@ export function useAutocomplete(
   // Measure pixel position of a character index within the textarea.
   // Clones textarea styles into a hidden fixed div, inserts a zero-width marker
   // at `position`, then reads its bounding rect relative to the modal body.
-  const getCaretCoords = useCallback((position: number, dropdownWidth = 224): { top: number; left: number } => {
-    const textarea = textareaRef.current
-    const modal = modalBodyRef.current
-    if (!textarea || !modal) return { top: 0, left: 0 }
+  const getCaretCoords = useCallback(
+    (position: number, dropdownWidth = 224): { top: number; left: number } => {
+      const textarea = textareaRef.current
+      const modal = modalBodyRef.current
+      if (!textarea || !modal) return { top: 0, left: 0 }
 
-    const computed = window.getComputedStyle(textarea)
-    const textareaRect = textarea.getBoundingClientRect()
-    const mirror = document.createElement("div")
+      const computed = window.getComputedStyle(textarea)
+      const textareaRect = textarea.getBoundingClientRect()
+      const mirror = document.createElement("div")
 
-    mirror.style.position = "fixed"
-    mirror.style.top = `${textareaRect.top}px`
-    mirror.style.left = `${textareaRect.left}px`
-    mirror.style.width = `${textareaRect.width}px`
-    mirror.style.height = `${textareaRect.height}px`
-    mirror.style.overflow = "hidden"
-    mirror.style.visibility = "hidden"
-    mirror.style.pointerEvents = "none"
-    mirror.style.whiteSpace = "pre-wrap"
-    mirror.style.wordBreak = "break-word"
-    mirror.style.overflowWrap = "break-word"
+      mirror.style.position = "fixed"
+      mirror.style.top = `${textareaRect.top}px`
+      mirror.style.left = `${textareaRect.left}px`
+      mirror.style.width = `${textareaRect.width}px`
+      mirror.style.height = `${textareaRect.height}px`
+      mirror.style.overflow = "hidden"
+      mirror.style.visibility = "hidden"
+      mirror.style.pointerEvents = "none"
+      mirror.style.whiteSpace = "pre-wrap"
+      mirror.style.wordBreak = "break-word"
+      mirror.style.overflowWrap = "break-word"
 
-    for (const prop of MIRROR_STYLE_PROPS) {
-      ;(mirror.style as unknown as Record<string, string>)[prop] = computed[prop]
-    }
+      for (const prop of MIRROR_STYLE_PROPS) {
+        ;(mirror.style as unknown as Record<string, string>)[prop] = computed[prop]
+      }
 
-    mirror.textContent = textarea.value.slice(0, position)
-    const marker = document.createElement("span")
-    marker.textContent = "\u200b"
-    mirror.appendChild(marker)
+      mirror.textContent = textarea.value.slice(0, position)
+      const marker = document.createElement("span")
+      marker.textContent = "\u200b"
+      mirror.appendChild(marker)
 
-    document.body.appendChild(mirror)
-    const markerRect = marker.getBoundingClientRect()
-    const modalRect = modal.getBoundingClientRect()
-    document.body.removeChild(mirror)
+      document.body.appendChild(mirror)
+      const markerRect = marker.getBoundingClientRect()
+      const modalRect = modal.getBoundingClientRect()
+      document.body.removeChild(mirror)
 
-    return {
-      top: markerRect.bottom - modalRect.top,
-      // Clamp so dropdown doesn't overflow the modal's right edge
-      left: Math.min(markerRect.left - modalRect.left, modalRect.width - dropdownWidth),
-    }
-  }, [textareaRef, modalBodyRef])
+      return {
+        top: markerRect.bottom - modalRect.top,
+        // Clamp so dropdown doesn't overflow the modal's right edge
+        left: Math.min(markerRect.left - modalRect.left, modalRect.width - dropdownWidth),
+      }
+    },
+    [textareaRef, modalBodyRef],
+  )
 
   // Insert selected suggestion into textarea content
   const insertSuggestion = useCallback(
@@ -150,5 +163,13 @@ export function useAutocomplete(
     [suggestion, content, setValue, autoResize, textareaRef],
   )
 
-  return { suggestion, setSuggestion, suggestions, detectTrigger, getCaretCoords, insertSuggestion, mentionedUserIds }
+  return {
+    suggestion,
+    setSuggestion,
+    suggestions,
+    detectTrigger,
+    getCaretCoords,
+    insertSuggestion,
+    mentionedUserIds,
+  }
 }

@@ -48,7 +48,7 @@ export default function MediaLightbox({ media, initialIndex, onClose }: MediaLig
       onClick={onClose}
     >
       {/* Fixed background */}
-      <div className="absolute inset-0 bg-overlay/85 backdrop-blur-sm" />
+      <div className="bg-overlay/85 absolute inset-0 backdrop-blur-sm" />
 
       {/* Main media */}
       <div
@@ -61,7 +61,7 @@ export default function MediaLightbox({ media, initialIndex, onClose }: MediaLig
             src={current.url}
             controls
             autoPlay
-            className="shadow-overlay max-h-full max-w-full bg-overlay-media"
+            className="shadow-overlay bg-overlay-media max-h-full max-w-full"
           />
         ) : (
           <img
@@ -76,7 +76,7 @@ export default function MediaLightbox({ media, initialIndex, onClose }: MediaLig
         <button
           onClick={onClose}
           aria-label={t("post.media.close")}
-          className="absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full bg-overlay-fg/10 text-overlay-fg transition-colors hover:bg-overlay-fg/25 focus-visible:ring-2 focus-visible:ring-overlay-fg"
+          className="bg-overlay-fg/10 text-overlay-fg hover:bg-overlay-fg/25 focus-visible:ring-overlay-fg absolute top-4 right-4 flex h-9 w-9 items-center justify-center rounded-full transition-colors focus-visible:ring-2"
         >
           <Icon name="x" size={18} />
         </button>
@@ -87,14 +87,14 @@ export default function MediaLightbox({ media, initialIndex, onClose }: MediaLig
             <button
               onClick={prev}
               aria-label={t("post.media.previous")}
-              className="absolute top-1/2 left-4 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-overlay-fg/10 text-overlay-fg transition-colors hover:bg-overlay-fg/25 focus-visible:ring-2 focus-visible:ring-overlay-fg"
+              className="bg-overlay-fg/10 text-overlay-fg hover:bg-overlay-fg/25 focus-visible:ring-overlay-fg absolute top-1/2 left-4 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition-colors focus-visible:ring-2"
             >
               <Icon name="chevron-left" size={20} />
             </button>
             <button
               onClick={next}
               aria-label={t("post.media.next")}
-              className="absolute top-1/2 right-4 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-overlay-fg/10 text-overlay-fg transition-colors hover:bg-overlay-fg/25 focus-visible:ring-2 focus-visible:ring-overlay-fg"
+              className="bg-overlay-fg/10 text-overlay-fg hover:bg-overlay-fg/25 focus-visible:ring-overlay-fg absolute top-1/2 right-4 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full transition-colors focus-visible:ring-2"
             >
               <Icon name="chevron-right" size={20} />
             </button>
@@ -113,15 +113,15 @@ export default function MediaLightbox({ media, initialIndex, onClose }: MediaLig
               key={m.id ?? i}
               onClick={() => setIndex(i)}
               aria-label={t("post.media.thumbnail", { number: String(i + 1) })}
-              className={`duration-fast relative h-14 w-14 shrink-0 overflow-hidden rounded transition-all focus-visible:ring-2 focus-visible:ring-overlay-fg motion-reduce:transition-none ${
+              className={`duration-fast focus-visible:ring-overlay-fg relative h-14 w-14 shrink-0 overflow-hidden rounded transition-all focus-visible:ring-2 motion-reduce:transition-none ${
                 i === index
-                  ? "opacity-100 ring-1 ring-overlay-fg ring-offset-1 ring-offset-transparent"
+                  ? "ring-overlay-fg opacity-100 ring-1 ring-offset-1 ring-offset-transparent"
                   : "opacity-50 hover:opacity-80"
               }`}
             >
               {m.media_type?.startsWith("video") ? (
                 <>
-                  <div className="h-full w-full bg-overlay-thumb" />
+                  <div className="bg-overlay-thumb h-full w-full" />
                   <span className="absolute inset-0 flex items-center justify-center">
                     <Icon name="play" size={16} className="text-overlay-fg" />
                   </span>

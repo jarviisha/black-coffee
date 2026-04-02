@@ -32,9 +32,14 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
   const [showAllReplies, setShowAllReplies] = useState(false)
 
   const { mutate: toggleCommentLike } = useToggleCommentLike()
-  const { data: allRepliesData, isLoading: isLoadingReplies } = useGetReplies(postId, comment.id!, undefined, {
-    query: { enabled: showAllReplies },
-  })
+  const { data: allRepliesData, isLoading: isLoadingReplies } = useGetReplies(
+    postId,
+    comment.id!,
+    undefined,
+    {
+      query: { enabled: showAllReplies },
+    },
+  )
 
   const previewReplies = comment.replies ?? []
   const replyCount = comment.reply_count ?? 0
@@ -74,7 +79,9 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
           href={`/@${comment.author?.username}`}
           size="sm"
         />
-        {hasVisibleReplies && <div className="bg-border mt-2 w-0.5 flex-1" style={{ minHeight: "16px" }} />}
+        {hasVisibleReplies && (
+          <div className="bg-border mt-2 w-0.5 flex-1" style={{ minHeight: "16px" }} />
+        )}
       </div>
 
       {/* Right: content + actions + nested replies */}
@@ -87,7 +94,9 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
         />
 
         {comment.content && (
-          <p className="text-text mt-1 text-sm leading-relaxed whitespace-pre-wrap">{comment.content}</p>
+          <p className="text-text mt-1 text-sm leading-relaxed whitespace-pre-wrap">
+            {comment.content}
+          </p>
         )}
 
         {/* Actions */}
@@ -97,7 +106,7 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
             aria-label={isLiked ? t("comment.unlike") : t("comment.like")}
             aria-pressed={isLiked}
             className={cn(
-              "flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none hover:text-error",
+              "hover:text-error flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none",
               isLiked && "text-error",
             )}
           >
@@ -107,7 +116,7 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
 
           <button
             onClick={() => setIsReplying((v) => !v)}
-            className="flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none hover:text-text"
+            className="hover:text-text flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none"
           >
             <Icon name="message-circle" size={15} aria-hidden="true" />
             {replyCount > 0 && <span aria-hidden="true">{formatCount(replyCount)}</span>}
@@ -160,7 +169,9 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
               onClick={() => setShowReplies((v) => !v)}
               className="text-text-muted hover:text-text w-fit text-xs font-medium transition-colors motion-reduce:transition-none"
             >
-              {showReplies ? t("comment.hideReplies") : t("comment.viewReplies", { count: replyCount })}
+              {showReplies
+                ? t("comment.hideReplies")
+                : t("comment.viewReplies", { count: replyCount })}
             </button>
           </div>
         )}

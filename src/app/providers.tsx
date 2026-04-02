@@ -49,7 +49,8 @@ function AuthInitializer() {
       .catch((err: unknown) => {
         // Axios throws CanceledError (name: "CanceledError") when aborted via AbortSignal,
         // not the native fetch AbortError — both must be ignored to avoid spurious logout.
-        if (err instanceof Error && (err.name === "AbortError" || err.name === "CanceledError")) return
+        if (err instanceof Error && (err.name === "AbortError" || err.name === "CanceledError"))
+          return
         // Only logout when the server explicitly rejects the refresh token (401).
         // Network errors, 5xx, CORS failures, etc. should not clear the session.
         const status = (err as { response?: { status?: number } }).response?.status

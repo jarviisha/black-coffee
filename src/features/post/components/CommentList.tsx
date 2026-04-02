@@ -17,11 +17,7 @@ export function CommentList({ postId }: CommentListProps) {
   }
 
   if (comments.length === 0) {
-    return (
-      <div className="py-14 text-center text-sm text-text-muted">
-        {t("comment.noReplies")}
-      </div>
-    )
+    return <div className="text-text-muted py-14 text-center text-sm">{t("comment.noReplies")}</div>
   }
 
   return (

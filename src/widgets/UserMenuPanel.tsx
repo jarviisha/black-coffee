@@ -14,10 +14,11 @@ interface UserMenuPanelProps {
 
 type Submenu = "language" | "theme" | null
 
-const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode"; icon: string }[] = [
-  { value: "light", labelKey: "nav.lightMode", icon: "sun" },
-  { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
-]
+const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode"; icon: string }[] =
+  [
+    { value: "light", labelKey: "nav.lightMode", icon: "sun" },
+    { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
+  ]
 
 export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   const { t, i18n } = useTranslation()
@@ -42,7 +43,8 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   }
 
   const menuItemClass = "h-auto w-full justify-start rounded-none px-4 py-3 font-normal"
-  const submenuItemClass = "h-auto w-full justify-start rounded-none px-3 py-2.5 font-normal text-sm"
+  const submenuItemClass =
+    "h-auto w-full justify-start rounded-none px-3 py-2.5 font-normal text-sm"
 
   return (
     <div
@@ -57,7 +59,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
         color="muted"
         onClick={onClose}
         leftIcon={<Icon name="lock" size={16} aria-hidden="true" />}
-        className={cn(menuItemClass, "rounded-t-md rounded-b-md-none")}
+        className={cn(menuItemClass, "rounded-b-md-none rounded-t-md")}
       >
         {t("nav.privacySettings")}
       </Button>
@@ -65,11 +67,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
       <div className="border-border border-t" />
 
       {/* Language — submenu */}
-      <div
-        className="relative"
-        onMouseEnter={() => openSub("language")}
-        onMouseLeave={closeSub}
-      >
+      <div className="relative" onMouseEnter={() => openSub("language")} onMouseLeave={closeSub}>
         <Button
           role="menuitem"
           variant="ghost"
@@ -78,7 +76,11 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
           rightIcon={<Icon name="chevron-right" size={14} aria-hidden="true" />}
           aria-haspopup="menu"
           aria-expanded={openSubmenu === "language"}
-          className={cn(menuItemClass, "rounded-none", openSubmenu === "language" && "bg-surface-hi text-text")}
+          className={cn(
+            menuItemClass,
+            "rounded-none",
+            openSubmenu === "language" && "bg-surface-hi text-text",
+          )}
         >
           {t("nav.language")}
         </Button>
@@ -88,7 +90,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
             role="menu"
             onMouseEnter={() => openSub("language")}
             onMouseLeave={closeSub}
-            className="bg-bg border-border absolute left-full top-0 w-44 overflow-hidden rounded border shadow-lg"
+            className="bg-bg border-border absolute top-0 left-full w-44 overflow-hidden rounded border shadow-lg"
           >
             {(Object.entries(LANGUAGES) as [Language, (typeof LANGUAGES)[Language]][]).map(
               ([code, { label, nativeLabel }]) => (
@@ -104,7 +106,11 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
                       <Icon name="check" size={14} className="text-accent" aria-hidden="true" />
                     ) : undefined
                   }
-                  className={cn(submenuItemClass, "first:rounded-t-md last:rounded-b-md", i18n.language === code && "text-text")}
+                  className={cn(
+                    submenuItemClass,
+                    "first:rounded-t-md last:rounded-b-md",
+                    i18n.language === code && "text-text",
+                  )}
                 >
                   <span className="flex flex-col items-start">
                     <span>{label}</span>
@@ -118,11 +124,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
       </div>
 
       {/* Theme — submenu */}
-      <div
-        className="relative"
-        onMouseEnter={() => openSub("theme")}
-        onMouseLeave={closeSub}
-      >
+      <div className="relative" onMouseEnter={() => openSub("theme")} onMouseLeave={closeSub}>
         <Button
           role="menuitem"
           variant="ghost"
@@ -131,7 +133,11 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
           rightIcon={<Icon name="chevron-right" size={14} aria-hidden="true" />}
           aria-haspopup="menu"
           aria-expanded={openSubmenu === "theme"}
-          className={cn(menuItemClass, "rounded-none", openSubmenu === "theme" && "bg-surface-hi text-text")}
+          className={cn(
+            menuItemClass,
+            "rounded-none",
+            openSubmenu === "theme" && "bg-surface-hi text-text",
+          )}
         >
           {t("nav.theme")}
         </Button>
@@ -141,7 +147,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
             role="menu"
             onMouseEnter={() => openSub("theme")}
             onMouseLeave={closeSub}
-            className="bg-bg border-border absolute left-full top-0 w-44 overflow-hidden rounded border shadow-lg"
+            className="bg-bg border-border absolute top-0 left-full w-44 overflow-hidden rounded border shadow-lg"
           >
             {THEME_OPTIONS.map(({ value, labelKey, icon }) => (
               <Button
@@ -157,7 +163,11 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
                   ) : undefined
                 }
                 aria-current={theme === value ? "true" : undefined}
-                className={cn(submenuItemClass, "first:rounded-t-md last:rounded-b-md", theme === value && "text-text")}
+                className={cn(
+                  submenuItemClass,
+                  "first:rounded-t-md last:rounded-b-md",
+                  theme === value && "text-text",
+                )}
               >
                 {t(labelKey)}
               </Button>

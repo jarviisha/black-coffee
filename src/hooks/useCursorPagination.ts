@@ -22,7 +22,13 @@ type UseCursorPaginationOptions<T> = {
   resetKey?: unknown
 }
 
-export function useCursorPagination<T>({ cursor, onNextPage, isFetching, page, resetKey }: UseCursorPaginationOptions<T>) {
+export function useCursorPagination<T>({
+  cursor,
+  onNextPage,
+  isFetching,
+  page,
+  resetKey,
+}: UseCursorPaginationOptions<T>) {
   const [items, setItems] = useState<T[]>([])
   const fetchedKeys = useRef(new Set<string>())
   const nextCursorRef = useRef<string | undefined>(undefined)

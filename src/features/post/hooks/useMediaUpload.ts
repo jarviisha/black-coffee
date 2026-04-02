@@ -29,8 +29,14 @@ export function useMediaUpload(setValue: UseFormSetValue<CreatePostInput>, t: TF
         const res = await uploadMedia({ data: { file } })
         if (res.key && res.url && res.media_type) {
           setUploadedMedia((prev) => {
-            const next = [...prev, { key: res.key!, url: res.url!, media_type: res.media_type!, file }]
-            setValue("media_keys", next.map((m) => m.key))
+            const next = [
+              ...prev,
+              { key: res.key!, url: res.url!, media_type: res.media_type!, file },
+            ]
+            setValue(
+              "media_keys",
+              next.map((m) => m.key),
+            )
             return next
           })
         }
@@ -46,7 +52,10 @@ export function useMediaUpload(setValue: UseFormSetValue<CreatePostInput>, t: TF
   const removeMedia = (key: string) => {
     setUploadedMedia((prev) => {
       const next = prev.filter((m) => m.key !== key)
-      setValue("media_keys", next.map((m) => m.key))
+      setValue(
+        "media_keys",
+        next.map((m) => m.key),
+      )
       return next
     })
   }

@@ -21,7 +21,13 @@ interface AvatarProps extends HTMLAttributes<HTMLElement> {
   className?: string
 }
 
-function AvatarImage({ src, name, size = "md", className = "", ...props }: Omit<AvatarProps, "href">) {
+function AvatarImage({
+  src,
+  name,
+  size = "md",
+  className = "",
+  ...props
+}: Omit<AvatarProps, "href">) {
   const [errorSrc, setErrorSrc] = useState<string | null | undefined>(null)
   const sizeClass = sizeMap[size]
 
@@ -54,7 +60,7 @@ function AvatarImage({ src, name, size = "md", className = "", ...props }: Omit<
 export function Avatar({ src, name, size = "md", href, className, ...props }: AvatarProps) {
   if (href) {
     return (
-      <Link to={href} className="block shrink-0 w-fit h-fit" {...(props as object)}>
+      <Link to={href} className="block h-fit w-fit shrink-0" {...(props as object)}>
         <AvatarImage src={src} name={name} size={size} className={className} />
       </Link>
     )

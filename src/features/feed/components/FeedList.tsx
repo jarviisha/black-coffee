@@ -12,10 +12,9 @@ export function FeedList() {
   const isInitialized = useAuthStore((s) => s.isInitialized)
   const [cursor, setCursor] = useState<string | undefined>(undefined)
 
-  const { data, isLoading, isFetching, isError } = useGetFeed(
-    cursor ? { cursor } : undefined,
-    { query: { enabled: isInitialized } },
-  )
+  const { data, isLoading, isFetching, isError } = useGetFeed(cursor ? { cursor } : undefined, {
+    query: { enabled: isInitialized },
+  })
 
   const { items, sentinelRef } = useCursorPagination<HandlerFeedItemResponse>({
     cursor,
@@ -29,19 +28,11 @@ export function FeedList() {
   }
 
   if (isError && items.length === 0) {
-    return (
-      <div className="py-16 text-center text-sm text-text-muted">
-        {t("feed.error")}
-      </div>
-    )
+    return <div className="text-text-muted py-16 text-center text-sm">{t("feed.error")}</div>
   }
 
   if (!isLoading && items.length === 0) {
-    return (
-      <div className="py-16 text-center text-sm text-text-muted">
-        {t("feed.empty")}
-      </div>
-    )
+    return <div className="text-text-muted py-16 text-center text-sm">{t("feed.empty")}</div>
   }
 
   return (

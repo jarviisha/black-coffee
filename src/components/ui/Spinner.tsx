@@ -18,7 +18,7 @@ export function Spinner({ size = "md", centered = false, className }: SpinnerPro
   const spinner = (
     <span
       className={cn(
-        "inline-block rounded-full border-2 border-current border-t-transparent animate-spin motion-reduce:animate-none",
+        "inline-block animate-spin rounded-full border-2 border-current border-t-transparent motion-reduce:animate-none",
         sizeClass[size],
       )}
       aria-hidden="true"
@@ -27,7 +27,7 @@ export function Spinner({ size = "md", centered = false, className }: SpinnerPro
 
   if (centered) {
     return (
-      <div className={cn("flex items-center justify-center text-text-muted", className)}>
+      <div className={cn("text-text-muted flex items-center justify-center", className)}>
         {spinner}
       </div>
     )
