@@ -1,0 +1,1 @@
+{"properties":{"error":{"properties":{"code":{"type":"string"},"details":{"additionalProperties":{},"type":"object"},"message":{"type":"string"}},"type":"object","x-readme-ref-name":"errors.ErrorDetail"}},"type":"object","x-readme-ref-name":"errors.ErrorResponse"}

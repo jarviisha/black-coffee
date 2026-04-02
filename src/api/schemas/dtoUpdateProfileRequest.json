@@ -1,0 +1,1 @@
+{"properties":{"bio":{"example":"Software engineer & coffee lover","type":"string"},"display_name":{"example":"Nguyen Van A","type":"string"},"location":{"example":"Ha Noi, Viet Nam","type":"string"},"website":{"example":"https://example.com","type":"string"}},"type":"object","x-readme-ref-name":"dto.UpdateProfileRequest"}

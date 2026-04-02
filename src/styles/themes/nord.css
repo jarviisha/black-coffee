@@ -1,0 +1,75 @@
+/* ─── Theme: Nord ───────────────────────────────────────────────────────── */
+/* https://www.nordtheme.com/docs/colors-and-palettes                       */
+:root {
+  --bg: #eceff4;
+  --surface: #e5e9f0;
+  --surface-hi: #d8dee9;
+  --border: #c8d0dc;
+  --border-hi: #aab4c4;
+
+  --text: #2e3440;
+  --text-muted: #4c566a;
+  --text-sub: #6b7a96;
+
+  --accent: #5e81ac;
+  --accent-fg: #eceff4;
+
+  --input-bg: #eceff4;
+  --input-text: #2e3440;
+  --input-border: #c8d0dc;
+  --input-ring: #5e81ac;
+
+  --error: #bf616a;
+  --error-fg: #fce8ea;
+  --error-border: #f0b8bc;
+
+  --mention: #5e81ac;
+  --mention-bg: rgb(94 129 172 / 0.12);
+  --hashtag: #a3be8c;
+  --hashtag-bg: rgb(163 190 140 / 0.15);
+  --like: #bf616a;
+
+  --strength-1: #bf616a;
+  --strength-2: #ebcb8b;
+  --strength-3: #81a1c1;
+  --strength-4: #a3be8c;
+}
+
+.dark {
+  /* polar night */
+  --bg: #2e3440;
+  --surface: #3b4252;
+  --surface-hi: #434c5e;
+  --border: #4c566a;
+  --border-hi: #5a6680;
+
+  /* snow storm */
+  --text: #eceff4;
+  --text-muted: #d8dee9;
+  --text-sub: #aab4c4;
+
+  /* frost — blue-gray */
+  --accent: #88c0d0;
+  --accent-fg: #2e3440;
+
+  --input-bg: #2e3440;
+  --input-text: #eceff4;
+  --input-border: #4c566a;
+  --input-ring: #88c0d0;
+
+  /* aurora red */
+  --error: #bf616a;
+  --error-fg: rgb(191 97 106 / 0.2);
+  --error-border: rgb(191 97 106 / 0.35);
+
+  --mention: #81a1c1;
+  --mention-bg: rgb(129 161 193 / 0.15);
+  --hashtag: #a3be8c;
+  --hashtag-bg: rgb(163 190 140 / 0.15);
+  --like: #bf616a;
+
+  --strength-1: #bf616a;
+  --strength-2: #ebcb8b;
+  --strength-3: #81a1c1;
+  --strength-4: #a3be8c;
+}

@@ -1,0 +1,1 @@
+{"properties":{"unread_count":{"type":"integer"}},"type":"object","x-readme-ref-name":"dto.UnreadCountResponse"}

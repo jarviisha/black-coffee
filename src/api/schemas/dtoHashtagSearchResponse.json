@@ -1,0 +1,1 @@
+{"properties":{"prefix":{"type":"string"},"results":{"items":{"type":"string"},"type":"array"}},"type":"object","x-readme-ref-name":"dto.HashtagSearchResponse"}

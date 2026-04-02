@@ -1,0 +1,1 @@
+{"properties":{"data":{"items":{"properties":{"count":{"type":"integer"},"name":{"type":"string"}},"type":"object","x-readme-ref-name":"dto.TrendingHashtagResponse"},"type":"array"}},"type":"object","x-readme-ref-name":"dto.TrendingHashtagListResponse"}

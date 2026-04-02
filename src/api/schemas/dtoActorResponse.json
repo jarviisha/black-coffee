@@ -1,0 +1,1 @@
+{"properties":{"avatar_url":{"type":"string"},"display_name":{"type":"string"},"id":{"type":"string"},"username":{"type":"string"}},"type":"object","x-readme-ref-name":"dto.ActorResponse"}

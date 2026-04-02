@@ -1,0 +1,1 @@
+{"properties":{"key":{"example":"media/550e8400-e29b-41d4-a716-446655440000.jpg","type":"string"},"media_type":{"example":"image","type":"string"},"url":{"example":"http://localhost:8080/static/media/550e8400.jpg","type":"string"}},"type":"object","x-readme-ref-name":"handler.UploadResponse"}

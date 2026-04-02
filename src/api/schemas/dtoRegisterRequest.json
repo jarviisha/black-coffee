@@ -1,0 +1,1 @@
+{"properties":{"display_name":{"example":"John Doe","type":"string"},"email":{"example":"john@example.com","type":"string"},"password":{"example":"SecurePass123","type":"string"},"username":{"example":"johndoe","type":"string"}},"type":"object","x-readme-ref-name":"dto.RegisterRequest"}

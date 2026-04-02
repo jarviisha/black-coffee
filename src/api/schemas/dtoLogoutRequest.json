@@ -1,0 +1,1 @@
+{"properties":{"refresh_token":{"type":"string"}},"type":"object","x-readme-ref-name":"dto.LogoutRequest"}

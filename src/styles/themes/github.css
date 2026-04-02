@@ -1,0 +1,75 @@
+/* ─── Theme: GitHub (Primer Design System) ─────────────────────────────── */
+/* https://primer.style/foundations/color/overview                          */
+:root {
+  --bg: #ffffff;
+  --surface: #f6f8fa;
+  --surface-hi: #eaeef2;
+  --border: #d0d7de;
+  --border-hi: #afb8c1;
+
+  --text: #1f2328;
+  --text-muted: #636c76;
+  --text-sub: #848d97;
+
+  --accent: #0969da;
+  --accent-fg: #ffffff;
+
+  --input-bg: #ffffff;
+  --input-text: #1f2328;
+  --input-border: #d0d7de;
+  --input-ring: #0969da;
+
+  --error: #d1242f;
+  --error-fg: #ffebe9;
+  --error-border: #ffcecb;
+
+  --mention: #0969da;
+  --mention-bg: #ddf4ff;
+  --hashtag: #1a7f37;
+  --hashtag-bg: #dafbe1;
+  --like: #bf3989;
+
+  --strength-1: #d1242f;
+  --strength-2: #9a6700;
+  --strength-3: #0969da;
+  --strength-4: #1a7f37;
+}
+
+.dark {
+  /* canvas scale */
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-hi: #21262d;
+  --border: #30363d;
+  --border-hi: #484f58;
+
+  /* fg scale */
+  --text: #e6edf3;
+  --text-muted: #8d96a0;
+  --text-sub: #6e7681;
+
+  --accent: #e2e2e2;
+  --accent-fg: #111111;
+
+  --input-bg: #0d1117;
+  --input-text: #e6edf3;
+  --input-border: #30363d;
+  --input-ring: #58a6ff;
+
+  /* danger scale */
+  --error: #f85149;
+  --error-fg: rgb(248 81 73 / 0.15);
+  --error-border: rgb(248 81 73 / 0.3);
+
+  /* semantic colors */
+  --mention: #58a6ff;
+  --mention-bg: rgb(56 139 253 / 0.15);
+  --hashtag: #3fb950;
+  --hashtag-bg: rgb(63 185 80 / 0.15);
+  --like: #f47067;
+
+  --strength-1: #f85149;
+  --strength-2: #d29922;
+  --strength-3: #58a6ff;
+  --strength-4: #3fb950;
+}

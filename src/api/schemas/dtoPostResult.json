@@ -1,0 +1,1 @@
+{"properties":{"author_id":{"type":"string"},"comment_count":{"type":"integer"},"content":{"type":"string"},"created_at":{"type":"string"},"id":{"type":"string"},"like_count":{"type":"integer"}},"type":"object","x-readme-ref-name":"dto.PostResult"}

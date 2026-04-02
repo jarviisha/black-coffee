@@ -1,0 +1,1 @@
+{"properties":{"content":{"example":"Updated content","type":"string"},"mention_user_ids":{"example":["[\"uuid-of-alice\"]"],"items":{"type":"string"},"type":"array"},"tags":{"example":["[\"golang\"","\"webdev\"]"],"items":{"type":"string"},"type":"array"},"visibility":{"example":"followers","type":"string"}},"type":"object","x-readme-ref-name":"dto.UpdatePostRequest"}

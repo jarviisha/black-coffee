@@ -1,0 +1,1 @@
+{"properties":{"email":{"example":"john.updated@example.com","type":"string"}},"type":"object","x-readme-ref-name":"dto.UpdateUserRequest"}

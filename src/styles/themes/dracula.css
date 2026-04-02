@@ -1,0 +1,72 @@
+/* ─── Theme: Dracula ────────────────────────────────────────────────────── */
+/* https://draculatheme.com/contribute                                      */
+:root {
+  --bg: #f8f8f2;
+  --surface: #f0f0ea;
+  --surface-hi: #e4e4da;
+  --border: #d4d4c8;
+  --border-hi: #b8b8a8;
+
+  --text: #282a36;
+  --text-muted: #44475a;
+  --text-sub: #6272a4;
+
+  --accent: #6272a4;
+  --accent-fg: #f8f8f2;
+
+  --input-bg: #f8f8f2;
+  --input-text: #282a36;
+  --input-border: #d4d4c8;
+  --input-ring: #bd93f9;
+
+  --error: #ff5555;
+  --error-fg: #ffe8e8;
+  --error-border: #ffb8b8;
+
+  --mention: #6272a4;
+  --mention-bg: rgb(98 114 164 / 0.12);
+  --hashtag: #50fa7b;
+  --hashtag-bg: rgb(80 250 123 / 0.1);
+  --like: #ff79c6;
+
+  --strength-1: #ff5555;
+  --strength-2: #f1fa8c;
+  --strength-3: #8be9fd;
+  --strength-4: #50fa7b;
+}
+
+.dark {
+  --bg: #282a36;
+  --surface: #21222c;
+  --surface-hi: #44475a;
+  --border: #373846;
+  --border-hi: #44475a;
+
+  --text: #f8f8f2;
+  --text-muted: #a0a8c0;
+  --text-sub: #6272a4;
+
+  /* purple accent */
+  --accent: #f8f8f2;
+  --accent-fg: #282a36;
+
+  --input-bg: #21222c;
+  --input-text: #f8f8f2;
+  --input-border: #44475a;
+  --input-ring: #bd93f9;
+
+  --error: #ff5555;
+  --error-fg: rgb(255 85 85 / 0.15);
+  --error-border: rgb(255 85 85 / 0.3);
+
+  --mention: #8be9fd;
+  --mention-bg: rgb(139 233 253 / 0.12);
+  --hashtag: #50fa7b;
+  --hashtag-bg: rgb(80 250 123 / 0.12);
+  --like: #ff79c6;
+
+  --strength-1: #ff5555;
+  --strength-2: #f1fa8c;
+  --strength-3: #8be9fd;
+  --strength-4: #50fa7b;
+}

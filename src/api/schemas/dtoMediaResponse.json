@@ -1,0 +1,1 @@
+{"properties":{"id":{"type":"string"},"media_type":{"type":"string"},"position":{"type":"integer"},"url":{"type":"string"}},"type":"object","x-readme-ref-name":"dto.MediaResponse"}

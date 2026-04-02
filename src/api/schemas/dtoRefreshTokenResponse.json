@@ -1,0 +1,1 @@
+{"properties":{"access_expires_in":{"type":"integer"},"access_token":{"type":"string"},"refresh_expires_in":{"type":"integer"},"refresh_token":{"type":"string"},"token_type":{"type":"string"}},"type":"object","x-readme-ref-name":"dto.RefreshTokenResponse"}
