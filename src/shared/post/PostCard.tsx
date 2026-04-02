@@ -12,7 +12,7 @@ import { ButtonIcon } from "@/components/ui/Button"
 // Minimal structural type covering all fields PostCard consumes.
 // Both HandlerFeedItemResponse and DtoPostResponse satisfy this shape.
 type PostCardItem = {
-  id: string
+  id?: string
   content?: string
   created_at?: string
   comment_count?: number
@@ -89,6 +89,7 @@ interface PostCardProps {
 
 export function PostCard({ post }: PostCardProps) {
   const { t } = useTranslation()
+  const id = post.id
   const [liked, setLiked] = useState(post.is_liked ?? false)
   const [likeCount, setLikeCount] = useState(post.like_count ?? 0)
   const { mutate: toggleLike } = useToggleLike()
@@ -97,8 +98,9 @@ export function PostCard({ post }: PostCardProps) {
     const next = !liked
     setLiked(next)
     setLikeCount((c) => c + (next ? 1 : -1))
+    if (!id) return
     toggleLike(
-      { postID: post.id },
+      { postID: id },
       {
         onError: () => {
           setLiked(!next)
@@ -127,7 +129,7 @@ export function PostCard({ post }: PostCardProps) {
       </div>
 
       {/* Content */}
-      {post.content && <PostContent content={post.content} postId={post.id} />}
+      {post.content && id && <PostContent content={post.content} postId={id} />}
 
       {/* Media */}
       {post.media && post.media.length > 0 && <PostMedia media={post.media} />}
@@ -151,7 +153,7 @@ export function PostCard({ post }: PostCardProps) {
           </div>
 
           <Link
-            to={`/post/${post.id}`}
+            to={`/post/${id}`}
             aria-label={t("post.comments", { count: post.comment_count ?? 0 })}
             className="hover:text-text flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none"
           >
