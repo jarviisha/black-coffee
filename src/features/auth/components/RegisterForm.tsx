@@ -82,6 +82,10 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
+      <div className="mb-8">
+        <h1 className="text-text mb-2 text-4xl leading-tight">{t("auth.register.title")}</h1>
+        <p className="text-text-muted text-sm">{t("auth.register.subtitle")}</p>
+      </div>
       {serverError && (
         <div className="border-error-border bg-error-fg text-error mb-5 rounded border px-4 py-3 text-sm">
           {serverError}
