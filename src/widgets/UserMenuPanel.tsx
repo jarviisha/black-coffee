@@ -1,10 +1,8 @@
 import { useState, useRef } from "react"
-import { useNavigate } from "react-router"
 import { useTranslation } from "react-i18next"
-import { useAuthStore } from "@/store/authStore"
 import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
-import { queryClient } from "@/lib/queryClient"
+import { useAuth } from "@/features/auth/hooks/useAuth"
 import { Button } from "@/components/ui/Button"
 import Icon from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
@@ -23,9 +21,8 @@ const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode";
 
 export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   const { t, i18n } = useTranslation()
-  const logout = useAuthStore((s) => s.logout)
+  const { logout } = useAuth()
   const { theme, setTheme } = useThemeStore()
-  const navigate = useNavigate()
 
   const [openSubmenu, setOpenSubmenu] = useState<Submenu>(null)
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -42,8 +39,6 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   const handleLogout = () => {
     onClose()
     logout()
-    queryClient.clear()
-    void navigate("/login")
   }
 
   const menuItemClass = "h-auto w-full justify-start rounded-none px-4 py-3 font-normal"

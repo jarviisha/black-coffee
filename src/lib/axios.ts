@@ -60,11 +60,10 @@ axiosInstance.interceptors.response.use(
 
     const original = rawError.config as RetriableConfig | undefined
 
-    // Don't retry if: not a 401, already retried, or the failing request IS the refresh endpoint
-    // (intercepting the refresh's own 401 causes a deadlock — the queue waits for rejectQueue
-    // which only runs after the await resolves, which waits for the queue — circular)
-    const isRefreshRequest = original?.url?.includes("/auth/refresh")
-    if (rawError.response?.status !== 401 || original?._retry || isRefreshRequest) {
+    // Don't retry if: not a 401, already retried, or the failing request is an auth endpoint
+    // (login/register 401 = wrong credentials, not an expired token; refresh would deadlock)
+    const isAuthRequest = original?.url?.startsWith("/auth/")
+    if (rawError.response?.status !== 401 || original?._retry || isAuthRequest) {
       return Promise.reject(rawError)
     }
 

@@ -47,14 +47,11 @@ export function useAuth() {
           },
         },
       ),
-    logout: () =>
-      logoutMutation.mutate(
-        { data: {} },
-        {
-          onSuccess: () => { clearAuth(); queryClient.removeQueries() },
-          onError: () => { clearAuth(); queryClient.removeQueries() },
-        },
-      ),
+    logout: () => {
+      clearAuth()
+      queryClient.removeQueries()
+      logoutMutation.mutate({ data: {} })
+    },
     isLoggingIn: loginMutation.isPending,
     isRegistering: registerMutation.isPending,
     loginError: loginMutation.error,

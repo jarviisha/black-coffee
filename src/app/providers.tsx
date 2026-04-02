@@ -25,6 +25,13 @@ function AuthInitializer() {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10_000)
 
+    // Skip refresh on guest pages — no session to restore
+    const guestPaths = ["/login", "/register"]
+    if (guestPaths.includes(window.location.pathname)) {
+      setInitialized()
+      return
+    }
+
     // refresh_token is sent automatically via HttpOnly cookie — no body needed
     refreshToken(undefined, undefined, { signal: controller.signal })
       .then(async (data) => {
