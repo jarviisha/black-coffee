@@ -40,11 +40,11 @@ export function useCursorPagination<T>({ cursor, onNextPage, isFetching, page, r
   )
 
   // When resetKey changes, clear accumulated state so the current page is re-processed.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => {
     if (resetKey === undefined) return
     fetchedKeys.current.clear()
     nextCursorRef.current = undefined
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setItems([])
   }, [resetKey])
 

@@ -28,7 +28,7 @@ export function useSSENotifications() {
       void queryClient.invalidateQueries({ queryKey: getUnreadCountQueryKey() })
 
       try {
-        const data = JSON.parse((event as MessageEvent).data) as DtoNotificationResponse
+        const data = JSON.parse((event as MessageEvent<string>).data) as DtoNotificationResponse
         const actorName = data.actor?.display_name ?? data.actor?.username
         const typeLabel = data.type ? i18n.t(`notification.types.${data.type}` as never, "") : ""
 
