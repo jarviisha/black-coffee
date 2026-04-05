@@ -1,6 +1,7 @@
 import { useState, useRef } from "react"
 import { useNavigate } from "react-router"
 import { useTranslation } from "react-i18next"
+import { useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { Textarea } from "@/components/ui/Textarea"
@@ -14,8 +15,24 @@ import { PageHeader } from "@/components/ui/PageHeader"
 export function EditProfilePage() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const user = useAuthStore((s) => s.user)
   const setUser = useAuthStore((s) => s.setUser)
+
+  // Invalidate any cached /users/:userKey/profile queries so ProfilePage refetches fresh data
+  const invalidateProfileQueries = () => {
+    void queryClient.invalidateQueries({
+      predicate: (q) => {
+        const first = q.queryKey[0]
+        return (
+          typeof first === "object" &&
+          first !== null &&
+          "url" in first &&
+          (first as { url: string }).url === "/users/:userKey/profile"
+        )
+      },
+    })
+  }
 
   // Text fields
   const [displayName, setDisplayName] = useState(user?.display_name ?? "")
@@ -46,6 +63,7 @@ export function EditProfilePage() {
         onSuccess: (updated) => {
           setUser(updated)
           setAvatarPreview(null)
+          invalidateProfileQueries()
         },
       },
     )
@@ -61,6 +79,7 @@ export function EditProfilePage() {
         onSuccess: (updated) => {
           setUser(updated)
           setCoverPreview(null)
+          invalidateProfileQueries()
         },
       },
     )
@@ -82,6 +101,7 @@ export function EditProfilePage() {
       {
         onSuccess: (updated) => {
           setUser(updated)
+          invalidateProfileQueries()
           void navigate(-1)
         },
       },
