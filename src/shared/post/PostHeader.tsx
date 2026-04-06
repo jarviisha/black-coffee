@@ -40,7 +40,7 @@ export function PostHeader({
         <Button
           type="button"
           onClick={onFollow}
-          size="sm"
+          size="xs"
           disabled={isFollowPending}
           aria-label={t("profile.follow")}
         >

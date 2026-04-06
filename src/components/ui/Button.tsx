@@ -19,7 +19,7 @@ function ButtonIcon({ ref, name, iconSize, className, ...props }: ButtonIconProp
 }
 
 type Variant = "solid" | "outline" | "ghost" | "link"
-type Size = "sm" | "md" | "lg"
+type Size = "xs" | "sm" | "md" | "lg"
 type Color = "accent" | "danger" | "muted" | "primary"
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -65,6 +65,7 @@ const variantColorClass: Record<Variant, Record<Color, string>> = {
 }
 
 const sizeClass: Record<Size, string> = {
+  xs: "h-6 px-1.5 text-xs",
   sm: "h-8 px-2 text-xs",
   md: "h-10 px-3 text-sm",
   lg: "h-12 px-4 text-sm font-semibold",
