@@ -29,6 +29,24 @@ export function timeAgo(date: string | Date) {
   return formatDistanceToNow(new Date(date), { addSuffix: true, locale: getLocale() })
 }
 
+/** Compact number format, e.g. 1500 → "1,5K" */
+export function formatCount(n: number): string {
+  if (n < 1_000) return String(n)
+  if (n < 1_000_000) {
+    const val = n / 1_000
+    const formatted = val % 1 === 0 ? String(val) : val.toFixed(1).replace(".", ",")
+    return `${formatted}K`
+  }
+  if (n < 1_000_000_000) {
+    const val = n / 1_000_000
+    const formatted = val % 1 === 0 ? String(val) : val.toFixed(1).replace(".", ",")
+    return `${formatted}M`
+  }
+  const val = n / 1_000_000_000
+  const formatted = val % 1 === 0 ? String(val) : val.toFixed(1).replace(".", ",")
+  return `${formatted}B`
+}
+
 /** Full date format, e.g. "23 March, 2026" */
 export function formatDate(date: string | Date) {
   return format(new Date(date), "dd MMMM, yyyy", { locale: getLocale() })
