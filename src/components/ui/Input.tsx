@@ -35,7 +35,7 @@ function Input({
       <div
         className={cn(
           "bg-input-bg relative rounded border-2 border-transparent transition-colors motion-reduce:transition-none",
-          "focus-within:border-border-hi",
+          "focus-within:border-accent",
           error && "border-error",
         )}
       >
