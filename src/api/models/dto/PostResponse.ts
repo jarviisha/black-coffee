@@ -35,6 +35,10 @@ export type DtoPostResponse = {
     /**
      * @type boolean | undefined
     */
+    is_following_author?: boolean;
+    /**
+     * @type boolean | undefined
+    */
     is_liked?: boolean;
     /**
      * @type integer | undefined
