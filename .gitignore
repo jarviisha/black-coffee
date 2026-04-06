@@ -30,6 +30,8 @@ dist-ssr
 CLAUDE-*.md
 CLAUDE.md
 skills-lock.json
+.github/
+ai-issues/
 
 # wrangler files
 .wrangler
