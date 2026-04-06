@@ -22,10 +22,10 @@
   --error-fg: #ffebe9;
   --error-border: #ffcecb;
 
-  --mention: #0969da;
+  --mention: #1877f2;
   --mention-bg: #ddf4ff;
-  --hashtag: #0969da;
-  --hashtag-bg: #dafbe1;
+  --hashtag: #1877f2;
+  --hashtag-bg: #ddf4ff;
   --like: #bf3989;
 
   --strength-1: #d1242f;
@@ -61,10 +61,10 @@
   --error-border: rgb(248 81 73 / 0.3);
 
   /* semantic colors */
-  --mention: #0969da;
-  --mention-bg: rgb(56 139 253 / 0.15);
-  --hashtag: #0969da;
-  --hashtag-bg: rgb(63 185 80 / 0.15);
+  --mention: #1877f2;
+  --mention-bg: #ddf4ff;
+  --hashtag: #1877f2;
+  --hashtag-bg: #ddf4ff;
   --like: #f47067;
 
   --strength-1: #f85149;
