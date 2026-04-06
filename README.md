@@ -1,16 +1,12 @@
 # Black Coffee ☕
 
 ```text
-      (  )   (   )  )
-       ) (   )  (  (
-       ( )  (    ) )
-       _____________
-      <_____________> ___
-      |             |/ _ \
-      |    BLACK    | | |
-      |    COFFEE   |_| |
-      \             /\___/
-       \___________/
+         ( (
+        ) )
+        ........
+        |      |]
+        \      /
+         `----'
 ```
 
 ## 🚀 Project Status: Incubation Stage
@@ -51,18 +47,21 @@ src/
 ## 🏗️ Getting Started
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/) (LTS version)
 - [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
 
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone <your-repo-url>
    cd black-coffee
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
@@ -87,4 +86,5 @@ src/
 This project is currently private.
 
 ---
-*Everything is subject to change during this phase. Stay tuned for the official launch of Black Coffee!*
+
+_Everything is subject to change during this phase. Stay tuned for the official launch of Black Coffee!_
