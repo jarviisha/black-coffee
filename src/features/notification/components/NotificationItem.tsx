@@ -7,7 +7,7 @@ import { useMarkNotificationAsRead } from "@/api/hooks/useMarkNotificationAsRead
 import { getNotificationsQueryKey } from "@/api/hooks/useGetNotifications"
 import { getUnreadCountQueryKey } from "@/api/hooks/useGetUnreadCount"
 import type { DtoNotificationResponse } from "@/api/models/dto/NotificationResponse"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 
 type NotificationType = NonNullable<DtoNotificationResponse["type"]>
 type IconProps = {

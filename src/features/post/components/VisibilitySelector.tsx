@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import { VISIBILITY_OPTIONS, type Visibility } from "../schemas"
 
 const VISIBILITY_ICON: Record<Visibility, string> = {

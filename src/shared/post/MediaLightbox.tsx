@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { createPortal } from "react-dom"
 import { useTranslation } from "react-i18next"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import type { HandlerMediaResponse } from "@/api/models/handler/MediaResponse"
 
 interface MediaLightboxProps {

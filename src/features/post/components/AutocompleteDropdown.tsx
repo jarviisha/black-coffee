@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils"
 import { Avatar } from "@/components/ui/Avatar"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import type { SuggestionState, SuggestionItem } from "../hooks/useAutocomplete"
 
 interface AutocompleteDropdownProps {

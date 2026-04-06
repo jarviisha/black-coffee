@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react"
 import { useGetMe } from "@/api/hooks/useGetMe"
 import { Avatar } from "@/components/ui/Avatar"
 import { Button } from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import { UserMenuPanel } from "./UserMenuPanel"
 import { cn } from "@/lib/utils"
 

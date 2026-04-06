@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import ReactEmojiPicker, { type EmojiClickData, Theme } from "emoji-picker-react"
-import Icon from "./Icon"
+import { Icon } from "./Icon"
 import { useThemeStore } from "@/store/themeStore"
 
 interface EmojiPickerProps {
@@ -13,14 +13,21 @@ export function EmojiPicker({ onSelect, triggerLabel }: EmojiPickerProps) {
   const ref = useRef<HTMLDivElement>(null)
   const theme = useThemeStore((s) => s.theme)
 
-  // Close on outside click
+  // Close on outside click or Escape key
   useEffect(() => {
     if (!open) return
-    const handler = (e: MouseEvent) => {
+    const handleClick = (e: MouseEvent) => {
       if (!ref.current?.contains(e.target as Node)) setOpen(false)
     }
-    document.addEventListener("mousedown", handler)
-    return () => document.removeEventListener("mousedown", handler)
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false)
+    }
+    document.addEventListener("mousedown", handleClick)
+    document.addEventListener("keydown", handleKey)
+    return () => {
+      document.removeEventListener("mousedown", handleClick)
+      document.removeEventListener("keydown", handleKey)
+    }
   }, [open])
 
   const handleEmojiClick = (data: EmojiClickData) => {

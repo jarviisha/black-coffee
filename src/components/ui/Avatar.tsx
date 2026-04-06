@@ -13,21 +13,17 @@ const sizeMap = {
 
 type AvatarSize = keyof typeof sizeMap
 
-interface AvatarProps extends HTMLAttributes<HTMLElement> {
+interface AvatarImageProps extends HTMLAttributes<HTMLElement> {
   src?: string | null
   name?: string | null
   size?: AvatarSize
-  href?: string
-  className?: string
 }
 
-function AvatarImage({
-  src,
-  name,
-  size = "md",
-  className = "",
-  ...props
-}: Omit<AvatarProps, "href">) {
+interface AvatarProps extends AvatarImageProps {
+  href?: string
+}
+
+function AvatarImage({ src, name, size = "md", className, ...props }: AvatarImageProps) {
   const [errorSrc, setErrorSrc] = useState<string | null | undefined>(null)
   const sizeClass = sizeMap[size]
 
@@ -38,7 +34,7 @@ function AvatarImage({
         alt={name ?? ""}
         className={cn(sizeClass, "rounded-full object-cover", className)}
         onError={() => setErrorSrc(src)}
-        {...(props as HTMLAttributes<HTMLImageElement>)}
+        {...props}
       />
     )
   }
@@ -58,13 +54,15 @@ function AvatarImage({
 }
 
 export function Avatar({ src, name, size = "md", href, className, ...props }: AvatarProps) {
+  const imageProps = { src, name, size, className }
+
   if (href) {
     return (
-      <Link to={href} className="block h-fit w-fit shrink-0" {...(props as object)}>
-        <AvatarImage src={src} name={name} size={size} className={className} />
+      <Link to={href} className="block h-fit w-fit shrink-0">
+        <AvatarImage {...imageProps} />
       </Link>
     )
   }
 
-  return <AvatarImage src={src} name={name} size={size} className={className} {...props} />
+  return <AvatarImage {...imageProps} {...props} />
 }

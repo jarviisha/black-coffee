@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
 import { Button } from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
 
 const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode"; icon: string }[] =

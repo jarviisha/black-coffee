@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
 import { cn } from "@/lib/utils"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 
 interface PageHeaderProps {
   title: string
@@ -45,8 +45,7 @@ export function PageHeader({
         </div>
 
         {/* Center slot — title always centered */}
-        <div className="flex items-center justify-end">
-          {/* <div className="bg-accent/60 flex h-8 min-w-60 items-center justify-center rounded backdrop-blur-xs"> */}
+        <div className="flex items-center justify-center">
           <div className="flex h-8 min-w-60 items-center justify-center rounded">
             <h1
               className={cn(
@@ -62,12 +61,7 @@ export function PageHeader({
         </div>
 
         {/* Right slot — actions or empty placeholder */}
-        <div className="flex h-full items-center justify-end">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full">
-            {actions}
-            <Icon size={20} name="dots" />
-          </div>
-        </div>
+        <div className="flex h-full items-center justify-end">{actions}</div>
       </div>
     </div>
   )

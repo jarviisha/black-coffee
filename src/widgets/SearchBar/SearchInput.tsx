@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 
 interface SearchInputProps {
   inputRef: React.RefObject<HTMLInputElement | null>

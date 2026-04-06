@@ -4,7 +4,7 @@ import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
 import { useAuth } from "@/features/auth/hooks/useAuth"
 import { Button } from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
 
 interface UserMenuPanelProps {

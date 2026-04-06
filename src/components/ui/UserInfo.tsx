@@ -1,4 +1,5 @@
 import { Link } from "react-router"
+import { cn } from "@/lib/utils"
 
 interface UserInfoProps {
   displayName?: string | null
@@ -50,7 +51,7 @@ export function LinkedUserInfo({ displayName, username, meta, size = "md" }: Use
       username={username}
       meta={meta}
       nameEl={
-        <Link to={`/@${username}`} className={`${nameClass} underline-offset-2 hover:underline`}>
+        <Link to={`/@${username}`} className={cn(nameClass, "underline-offset-2 hover:underline")}>
           {displayName}
         </Link>
       }

@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next"
 import { Avatar } from "@/components/ui/Avatar"
 import { Button } from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Icon } from "@/components/ui/Icon"
 import { formatDate } from "@/lib/utils"
 import type { DtoUserResponse } from "@/api/models/dto/UserResponse"
 
