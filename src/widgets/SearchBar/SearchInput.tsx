@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
 
 interface SearchInputProps {
@@ -55,14 +54,14 @@ export function SearchInput({
       />
 
       {query && (
-        <Button
-          variant="ghost"
+        <button
+          type="button"
           aria-label={t("common.clear")}
           onClick={onClear}
-          className="text-text-sub hover:text-text-muted h-5 w-5 shrink-0 rounded-full transition-colors duration-150 motion-reduce:transition-none"
+          className="text-text-sub hover:text-text-muted h-5 w-5 shrink-0 cursor-pointer rounded-full transition-colors duration-150 motion-reduce:transition-none"
         >
           <Icon name="x" size={14} aria-hidden="true" />
-        </Button>
+        </button>
       )}
     </div>
   )

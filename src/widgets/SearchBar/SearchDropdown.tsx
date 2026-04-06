@@ -97,6 +97,8 @@ export function SearchDropdown({
                   <li key={user.id}>
                     <button
                       type="button"
+                      role="option"
+                      aria-selected={activeIndex === i}
                       onClick={() => user.username && onUserClick(user.username)}
                       className={cn(
                         "hover:bg-surface-hi flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors",
@@ -127,6 +129,8 @@ export function SearchDropdown({
                   <li key={tag}>
                     <button
                       type="button"
+                      role="option"
+                      aria-selected={activeIndex === userCount + i}
                       onClick={() => onHashtagClick(tag)}
                       className={cn(
                         "hover:bg-surface-hi flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors",

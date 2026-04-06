@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from "react"
 import { useGetMe } from "@/api/hooks/useGetMe"
+import { useDropdown } from "@/hooks/useDropdown"
 import { Avatar } from "@/components/ui/Avatar"
 import { Button } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
@@ -8,30 +8,13 @@ import { cn } from "@/lib/utils"
 
 export function UserCard() {
   const { data: me } = useGetMe()
-
-  const [open, setOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onPointerDown = (e: PointerEvent) => {
-      if (
-        !menuRef.current?.contains(e.target as Node) &&
-        !triggerRef.current?.contains(e.target as Node)
-      ) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener("pointerdown", onPointerDown)
-    return () => document.removeEventListener("pointerdown", onPointerDown)
-  }, [open])
+  const { open, setOpen, panelRef, triggerRef } = useDropdown()
 
   if (!me) return null
 
   return (
     <div className="relative">
-      {open && <UserMenuPanel menuRef={menuRef} onClose={() => setOpen(false)} />}
+      {open && <UserMenuPanel menuRef={panelRef} onClose={() => setOpen(false)} />}
 
       <Button
         ref={triggerRef}
@@ -40,6 +23,7 @@ export function UserCard() {
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-label="User menu"
         className={cn(
           "group h-auto w-full justify-start rounded px-2 py-3 font-normal",
           open && "bg-surface-hi",

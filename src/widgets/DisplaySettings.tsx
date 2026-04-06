@@ -1,7 +1,7 @@
-import { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
+import { useDropdown } from "@/hooks/useDropdown"
 import { Button } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
@@ -11,28 +11,6 @@ const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode";
     { value: "light", labelKey: "nav.lightMode", icon: "sun" },
     { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
   ]
-
-function useDropdown() {
-  const [open, setOpen] = useState(false)
-  const panelRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const onPointerDown = (e: PointerEvent) => {
-      if (
-        !panelRef.current?.contains(e.target as Node) &&
-        !triggerRef.current?.contains(e.target as Node)
-      ) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener("pointerdown", onPointerDown)
-    return () => document.removeEventListener("pointerdown", onPointerDown)
-  }, [open])
-
-  return { open, setOpen, panelRef, triggerRef }
-}
 
 const dropdownClass =
   "bg-bg border-border absolute top-full right-0 mt-1.5 w-40 overflow-hidden rounded border shadow-lg z-10"

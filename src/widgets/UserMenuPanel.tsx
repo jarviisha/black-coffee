@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
@@ -36,6 +36,13 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   const closeSub = () => {
     closeTimer.current = setTimeout(() => setOpenSubmenu(null), 120)
   }
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) clearTimeout(closeTimer.current)
+    }
+  }, [])
 
   const handleLogout = () => {
     onClose()

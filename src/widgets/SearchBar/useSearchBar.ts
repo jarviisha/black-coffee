@@ -48,6 +48,9 @@ export function useSearchBar() {
       const target = e.target as HTMLElement
       if (
         e.key === "/" &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.altKey &&
         target.tagName !== "INPUT" &&
         target.tagName !== "TEXTAREA" &&
         !target.isContentEditable

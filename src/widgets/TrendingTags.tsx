@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next"
-import { Button } from "@/components/ui/Button"
+import { Link } from "react-router"
 import { Spinner } from "@/components/ui/Spinner"
 import { useGetTrendingHashtags } from "@/api/hooks/useGetTrendingHashtags"
 
@@ -21,14 +21,14 @@ export function TrendingTags() {
         {isLoading && <Spinner centered className="py-4" />}
         {isError && <p className="text-text-muted px-0 py-2 text-xs">{t("discover.loadError")}</p>}
         {data?.data?.map(({ name, count }) => (
-          <Button
+          <Link
             key={name}
-            variant="ghost"
-            className="w-full justify-between border-0 px-0 hover:bg-transparent"
+            to={`/tags/${name}`}
+            className="hover:bg-surface-hi flex w-full justify-between rounded px-2 py-1.5 transition-colors"
           >
             <p className="text-text text-sm">#{name}</p>
             <span className="text-text-muted text-xs">{formatCount(count ?? 0)}</span>
-          </Button>
+          </Link>
         ))}
       </div>
     </div>
