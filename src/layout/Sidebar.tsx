@@ -49,9 +49,9 @@ export function Sidebar() {
     <nav className="flex h-full w-60 flex-col justify-between p-4">
       <div className="flex flex-col gap-8">
         {/* Brand */}
-        <div className="gap-1 px-2 text-lg font-semibold underline">
+        <div className="flex items-center gap-1 px-2 text-lg font-semibold underline decoration-transparent transition-colors hover:decoration-current">
           <Icon name="coffee" size={40} />
-          <span>Black Coffee</span>
+          <span>{t("common.brand")}</span>
         </div>
 
         {/* Nav links */}

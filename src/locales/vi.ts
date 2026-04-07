@@ -5,9 +5,9 @@ const vi: Translations = {
     back: "Quay lại",
     post: "Bài viết",
     clear: "Xóa",
-    brand: "black coffee",
+    brand: "Black Coffee",
     tagline: "Chia sẻ góc nhìn của bạn. Ủ nên câu chuyện. Kết nối qua ý tưởng.",
-    copyright: "© {{year}} black coffee",
+    copyright: "© {{year}} Black Coffee",
     features: {
       authentic: "Những cuộc trò chuyện thật sự",
       follow: "Theo dõi những giọng nói bạn yêu thích",

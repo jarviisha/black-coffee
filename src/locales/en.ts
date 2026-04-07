@@ -3,9 +3,9 @@ const en = {
     back: "Back",
     post: "Post",
     clear: "Clear",
-    brand: "black coffee",
+    brand: "Black Coffee",
     tagline: "Share your perspective. Brew your stories. Connect over ideas.",
-    copyright: "© {{year}} black coffee",
+    copyright: "© {{year}} Black Coffee",
     features: {
       authentic: "Authentic conversations",
       follow: "Follow the voices you love",
