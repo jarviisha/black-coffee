@@ -47,7 +47,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
           {/* Language — submenu */}
           <Menu.Sub value="language">
             <Menu.SubTrigger
-              leftIcon={<Icon name="globe" size={16} aria-hidden="true" />}
+              leftIcon={<Icon name="language" size={16} aria-hidden="true" />}
               rightIcon={<Icon name="chevron-right" size={14} aria-hidden="true" />}
             >
               {t("nav.language")}
@@ -117,7 +117,7 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
           <Menu.Item
             color="danger"
             onClick={handleLogout}
-            leftIcon={<Icon name="log-out" size={16} aria-hidden="true" />}
+            leftIcon={<Icon name="logout" size={16} aria-hidden="true" />}
             className="rounded-t-none"
           >
             {t("nav.logout")}
