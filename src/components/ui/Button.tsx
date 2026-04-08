@@ -22,7 +22,7 @@ type Variant = "solid" | "outline" | "ghost" | "link"
 type Size = "xs" | "sm" | "md" | "lg"
 type Color = "accent" | "danger" | "muted" | "primary"
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   ref?: Ref<HTMLButtonElement>
   variant?: Variant
   size?: Size

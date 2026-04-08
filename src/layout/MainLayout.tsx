@@ -9,7 +9,7 @@ export function MainLayout() {
 
   return (
     <div className="mx-auto flex min-h-screen w-350">
-      <aside className="border-border sticky top-0 h-screen shrink-0 border-r px-4">
+      <aside className="border-border sticky top-0 z-40 h-screen shrink-0 border-r px-4">
         <Sidebar />
       </aside>
       <main className="flex-1">
