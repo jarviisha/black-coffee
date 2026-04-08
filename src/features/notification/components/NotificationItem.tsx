@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router"
 import { useTranslation } from "react-i18next"
-import { useQueryClient } from "@tanstack/react-query"
+import { useQueryClient, type InfiniteData } from "@tanstack/react-query"
+import type { GetNotificationsQueryResponse } from "@/api/models/GetNotifications"
 import { cn, timeAgo } from "@/lib/utils"
 import { Avatar } from "@/components/ui/Avatar"
 import { useMarkNotificationAsRead } from "@/api/hooks/useMarkNotificationAsRead"
@@ -57,7 +58,22 @@ export function NotificationItem({ notification }: NotificationItemProps) {
   const { mutate: markRead } = useMarkNotificationAsRead({
     mutation: {
       onSuccess: () => {
-        void queryClient.invalidateQueries({ queryKey: getNotificationsQueryKey() })
+        // Cập nhật Optimistic trực tiếp trên cache
+        queryClient.setQueryData<InfiniteData<GetNotificationsQueryResponse>>(
+          getNotificationsQueryKey(),
+          (oldData) => {
+            if (!oldData) return oldData
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                data: page.data?.map((n) =>
+                  n.id === notification.id ? { ...n, is_read: true } : n
+                ) ?? [],
+              })),
+            }
+          }
+        )
         void queryClient.invalidateQueries({ queryKey: getUnreadCountQueryKey() })
       },
     },

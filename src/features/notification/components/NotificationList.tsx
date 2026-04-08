@@ -1,56 +1,60 @@
-import { useState, useRef, useEffect } from "react"
+import { useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
-import { useQueryClient } from "@tanstack/react-query"
-import { useGetNotifications, getNotificationsQueryKey } from "@/api/hooks/useGetNotifications"
+import { useQueryClient, type InfiniteData } from "@tanstack/react-query"
+import { getNotificationsQueryKey } from "@/api/hooks/useGetNotifications"
+import { useGetNotificationsInfinite } from "../hooks/useGetNotificationsInfinite"
 import { getUnreadCountQueryKey } from "@/api/hooks/useGetUnreadCount"
 import { useMarkAllNotificationsAsRead } from "@/api/hooks/useMarkAllNotificationsAsRead"
-import { useCursorPagination } from "@/hooks/useCursorPagination"
 import { Spinner } from "@/components/ui/Spinner"
 import { Button } from "@/components/ui/Button"
 import { NotificationItem } from "./NotificationItem"
-import type { DtoNotificationResponse } from "@/api/models/dto/NotificationResponse"
+import type { GetNotificationsQueryResponse } from "@/api/models/GetNotifications"
 
 export function NotificationList() {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
-  const [cursor, setCursor] = useState<string | undefined>(undefined)
-  const [paginationVersion, setPaginationVersion] = useState(0)
-  const firstNotifIdRef = useRef<string | undefined>(undefined)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
-  const { data, isLoading, isFetching, isError } = useGetNotifications(
-    cursor ? { cursor } : undefined,
-  )
+  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useGetNotificationsInfinite()
 
-  // Detect new notification arriving at top of initial page (SSE → invalidate → refetch)
   useEffect(() => {
-    if (cursor !== undefined || !data?.data?.length) return
-    const firstId = data.data[0].id
-    if (firstNotifIdRef.current !== undefined && firstId !== firstNotifIdRef.current) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setPaginationVersion((v) => v + 1)
-    }
-    firstNotifIdRef.current = firstId
-  }, [data, cursor])
-
-  const { items, sentinelRef } = useCursorPagination<DtoNotificationResponse>({
-    cursor,
-    onNextPage: setCursor,
-    isFetching,
-    page: data,
-    resetKey: paginationVersion,
-  })
+    if (!sentinelRef.current) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          void fetchNextPage()
+        }
+      },
+      { rootMargin: "200px" },
+    )
+    observer.observe(sentinelRef.current)
+    return () => observer.disconnect()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   const { mutate: markAll, isPending: isMarkingAll } = useMarkAllNotificationsAsRead({
     mutation: {
       onSuccess: () => {
-        void queryClient.invalidateQueries({ queryKey: getNotificationsQueryKey() })
+        // Cập nhật Optimistic trực tiếp trên cache, tránh reset màn hình cuộn xuống
+        queryClient.setQueryData<InfiniteData<GetNotificationsQueryResponse>>(
+          getNotificationsQueryKey(),
+          (oldData) => {
+            if (!oldData) return oldData
+            return {
+              ...oldData,
+              pages: oldData.pages.map((page) => ({
+                ...page,
+                data: page.data?.map((n) => ({ ...n, is_read: true })) ?? [],
+              })),
+            }
+          }
+        )
         void queryClient.invalidateQueries({ queryKey: getUnreadCountQueryKey() })
-        // Reset list to reload from first page
-        setCursor(undefined)
       },
     },
   })
 
+  const items = data?.pages.flatMap((page) => page.data ?? []) ?? []
   const hasUnread = items.some((n) => !n.is_read)
 
   if (isLoading && items.length === 0) {
@@ -93,7 +97,7 @@ export function NotificationList() {
       {/* Infinite scroll sentinel */}
       <div ref={sentinelRef} />
 
-      {isFetching && <Spinner centered className="py-6" />}
+      {isFetchingNextPage && <Spinner centered className="py-6" />}
     </div>
   )
 }
