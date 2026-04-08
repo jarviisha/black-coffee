@@ -67,12 +67,12 @@ export function NotificationItem({ notification }: NotificationItemProps) {
               ...oldData,
               pages: oldData.pages.map((page) => ({
                 ...page,
-                data: page.data?.map((n) =>
-                  n.id === notification.id ? { ...n, is_read: true } : n
-                ) ?? [],
+                data:
+                  page.data?.map((n) => (n.id === notification.id ? { ...n, is_read: true } : n)) ??
+                  [],
               })),
             }
-          }
+          },
         )
         void queryClient.invalidateQueries({ queryKey: getUnreadCountQueryKey() })
       },

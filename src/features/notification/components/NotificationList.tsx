@@ -47,7 +47,7 @@ export function NotificationList() {
                 data: page.data?.map((n) => ({ ...n, is_read: true })) ?? [],
               })),
             }
-          }
+          },
         )
         void queryClient.invalidateQueries({ queryKey: getUnreadCountQueryKey() })
       },
