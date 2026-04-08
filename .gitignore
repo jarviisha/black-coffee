@@ -32,6 +32,7 @@ CLAUDE.md
 skills-lock.json
 .github/
 ai-issues/
+ai-*/
 
 # wrangler files
 .wrangler
