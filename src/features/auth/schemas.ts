@@ -1,10 +1,12 @@
 import { z } from "zod"
 import type { TFunction } from "i18next"
 
+// Login only checks for presence — length rules belong to register/reset,
+// and echoing them here would leak the password policy to anyone at the login screen.
 export function createLoginSchema(t: TFunction) {
   return z.object({
     username: z.string().min(1, t("auth.validation.required")),
-    password: z.string().min(8, t("auth.validation.passwordMin")),
+    password: z.string().min(1, t("auth.validation.required")),
   })
 }
 
