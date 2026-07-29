@@ -36,7 +36,7 @@ export function UserCard() {
             <p className="text-text-muted truncate text-xs">@{me.username}</p>
           </div>
           <Icon
-            name="ellipsis"
+            name="dots"
             size={16}
             className={cn(
               "text-text-muted shrink-0 transition-opacity motion-reduce:transition-none",

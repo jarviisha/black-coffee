@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next"
 import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
 import { useAuth } from "@/features/auth/hooks/useAuth"
-import { Icon } from "@/components/ui/Icon"
+import { Icon, type IconName } from "@/components/ui/Icon"
 import * as Menu from "@/components/ui/Menu"
 import { cn } from "@/lib/utils"
 
@@ -11,11 +11,14 @@ interface UserMenuPanelProps {
   onClose: () => void
 }
 
-const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode"; icon: string }[] =
-  [
-    { value: "light", labelKey: "nav.lightMode", icon: "sun" },
-    { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
-  ]
+const THEME_OPTIONS: {
+  value: Theme
+  labelKey: "nav.lightMode" | "nav.darkMode"
+  icon: IconName
+}[] = [
+  { value: "light", labelKey: "nav.lightMode", icon: "sun" },
+  { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
+]
 
 export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
   const { t, i18n } = useTranslation()

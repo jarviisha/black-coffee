@@ -1,11 +1,11 @@
 import type { ButtonHTMLAttributes, ReactNode, Ref } from "react"
 import { cn } from "@/lib/utils"
 import { Spinner } from "./Spinner"
-import { Icon } from "./Icon"
+import { Icon, type IconName } from "./Icon"
 
 interface ButtonIconProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   ref?: Ref<HTMLButtonElement>
-  name: string
+  name: IconName
   iconSize?: number
   "aria-label": string
 }

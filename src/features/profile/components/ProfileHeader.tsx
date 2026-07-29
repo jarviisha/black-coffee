@@ -83,7 +83,7 @@ export function ProfileHeader({
         <div className="text-text-muted mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
           {user.location && (
             <span className="flex items-center gap-1.5">
-              <Icon name="map-pin" size={12} aria-hidden="true" />
+              <Icon name="location" size={12} aria-hidden="true" />
               {user.location}
             </span>
           )}

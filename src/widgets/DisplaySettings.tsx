@@ -3,14 +3,17 @@ import { useThemeStore, type Theme } from "@/store/themeStore"
 import { LANGUAGES, type Language } from "@/lib/i18n"
 import { useDropdown } from "@/hooks/useDropdown"
 import { Button } from "@/components/ui/Button"
-import { Icon } from "@/components/ui/Icon"
+import { Icon, type IconName } from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
 
-const THEME_OPTIONS: { value: Theme; labelKey: "nav.lightMode" | "nav.darkMode"; icon: string }[] =
-  [
-    { value: "light", labelKey: "nav.lightMode", icon: "sun" },
-    { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
-  ]
+const THEME_OPTIONS: {
+  value: Theme
+  labelKey: "nav.lightMode" | "nav.darkMode"
+  icon: IconName
+}[] = [
+  { value: "light", labelKey: "nav.lightMode", icon: "sun" },
+  { value: "dark", labelKey: "nav.darkMode", icon: "moon" },
+]
 
 const dropdownClass =
   "bg-bg border-border absolute top-full right-0 mt-1.5 w-40 overflow-hidden rounded border shadow-lg z-10"

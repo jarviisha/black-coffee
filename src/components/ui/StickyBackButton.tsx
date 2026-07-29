@@ -17,7 +17,7 @@ export function StickyBackButton() {
           aria-label={t("common.back")}
           onClick={() => void navigate(-1)}
         >
-          <Icon name="arrow-narrow-left" size={24} aria-hidden="true" />
+          <Icon name="arrow-left" size={24} aria-hidden="true" />
           <span>{t("common.back")}</span>
         </Button>
       </div>

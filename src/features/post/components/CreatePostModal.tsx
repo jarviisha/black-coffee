@@ -297,7 +297,7 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
                 className="hidden"
               />
               <ButtonIcon
-                name={isUploading ? "loader-2" : "image"}
+                name={isUploading ? "loader" : "image"}
                 iconSize={20}
                 onClick={() => fileInputRef.current?.click()}
                 disabled={isUploading}

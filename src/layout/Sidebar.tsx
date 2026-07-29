@@ -2,12 +2,20 @@ import { useMemo } from "react"
 import { NavLink } from "react-router"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/components/ui/Icon"
+import { Icon, type IconName } from "@/components/ui/Icon"
 import { useAuthStore } from "@/store/authStore"
 import { useComposeStore } from "@/store/composeStore"
 import { ComposeButton } from "@/widgets/ComposeButton"
 import { UserCard } from "@/widgets/UserCard"
 import { useGetUnreadCount } from "@/api/hooks/useGetUnreadCount"
+
+interface NavItem {
+  to: string
+  iconName: IconName
+  fillIconName: IconName
+  label: string
+  disabled?: boolean
+}
 
 export function Sidebar() {
   const { t } = useTranslation()
@@ -19,7 +27,7 @@ export function Sidebar() {
   })
   const unreadCount = unreadData?.unread_count ?? 0
 
-  const navItems = useMemo(
+  const navItems: NavItem[] = useMemo(
     () => [
       { to: "/", iconName: "home", fillIconName: "home-fill", label: t("nav.home") },
       {
@@ -36,8 +44,8 @@ export function Sidebar() {
       },
       {
         to: `/@${username ?? ""}`,
-        iconName: "user-2",
-        fillIconName: "user-2-fill",
+        iconName: "user",
+        fillIconName: "user-fill",
         label: t("nav.profile"),
         disabled: !username,
       },

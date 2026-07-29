@@ -1,12 +1,12 @@
 import { useState, useRef, useEffect } from "react"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
-import { Icon } from "@/components/ui/Icon"
+import { Icon, type IconName } from "@/components/ui/Icon"
 import { VISIBILITY_OPTIONS, type Visibility } from "../schemas"
 
-const VISIBILITY_ICON: Record<Visibility, string> = {
-  public: "world",
-  followers: "user",
+const VISIBILITY_ICON: Record<Visibility, IconName> = {
+  public: "globe",
+  followers: "user-circle",
   private: "lock",
 }
 
@@ -36,7 +36,7 @@ export function VisibilitySelector({ value, onChange }: VisibilitySelectorProps)
         onClick={() => setOpen((v) => !v)}
         className="flex cursor-pointer items-center gap-1.5"
       >
-        <Icon name={VISIBILITY_ICON[value] ?? "globe"} size={16} aria-hidden="true" />
+        <Icon name={VISIBILITY_ICON[value]} size={16} aria-hidden="true" />
         <span className="text-xs font-bold">{t(`compose.visibility.${value}`)}</span>
         <Icon name="chevron-down" size={14} aria-hidden="true" />
       </button>

@@ -1,5 +1,9 @@
+import type { IconName } from "./icon-names"
+
+export type { IconName }
+
 interface IconProps {
-  name: string
+  name: IconName
   size?: number
   className?: string
 }

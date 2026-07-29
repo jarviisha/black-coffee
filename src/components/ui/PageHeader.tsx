@@ -39,7 +39,7 @@ export function PageHeader({
               className="flex h-8 w-8 items-center justify-center rounded-full"
               onClick={() => void navigate(-1)}
             >
-              <Icon name="arrow-narrow-left" size={20} aria-hidden="true" />
+              <Icon name="arrow-left" size={20} aria-hidden="true" />
             </button>
           )}
         </div>

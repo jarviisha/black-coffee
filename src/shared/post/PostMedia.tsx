@@ -79,7 +79,7 @@ export function PostMedia({ media }: PostMediaProps) {
               aria-label={t("post.media.viewFullscreen")}
               className="bg-overlay-control/50 text-overlay-fg hover:bg-overlay-control/70 focus-visible:ring-overlay-fg absolute top-2 right-2 flex items-center justify-center rounded-full p-1.5 transition-colors focus-visible:ring-2"
             >
-              <Icon name="maximize-2" size={14} />
+              <Icon name="maximize" size={14} />
             </button>
           </div>
         ) : (

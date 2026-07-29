@@ -14,7 +14,7 @@ export function BackHeader() {
         onClick={() => void navigate(-1)}
         className="text-text-muted hover:text-text flex items-center gap-2 px-0 text-lg"
       >
-        <Icon name="arrow-narrow-left" size={20} aria-hidden="true" />
+        <Icon name="arrow-left" size={20} aria-hidden="true" />
         <span>{t("common.back")}</span>
       </Button>
     </div>

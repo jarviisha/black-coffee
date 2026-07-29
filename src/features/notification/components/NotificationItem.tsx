@@ -8,11 +8,11 @@ import { useMarkNotificationAsRead } from "@/api/hooks/useMarkNotificationAsRead
 import { getNotificationsQueryKey } from "@/api/hooks/useGetNotifications"
 import { getUnreadCountQueryKey } from "@/api/hooks/useGetUnreadCount"
 import type { DtoNotificationResponse } from "@/api/models/dto/NotificationResponse"
-import { Icon } from "@/components/ui/Icon"
+import { Icon, type IconName } from "@/components/ui/Icon"
 
 type NotificationType = NonNullable<DtoNotificationResponse["type"]>
 type IconProps = {
-  name: string
+  name: IconName
   size?: number
   className?: string
 }
@@ -25,7 +25,7 @@ const NOTIFICATION_TYPE_ICON: Record<NotificationType, IconProps> = {
   follow: { size: 16, className: "text-green-500", name: "user-plus" },
   repost: { size: 16, className: "text-green-500", name: "repost" },
   mention: { size: 16, className: "text-yellow-500", name: "at-sign" },
-  system_announcement: { size: 16, className: "text-text", name: "speakerphone" },
+  system_announcement: { size: 16, className: "text-text", name: "announcement" },
 }
 
 function resolveTarget(n: DtoNotificationResponse): string | null {
