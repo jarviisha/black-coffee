@@ -33,7 +33,10 @@ export function FormField({
         {hasLabel ? (
           <div className="flex items-center justify-between px-4 pt-2.5">
             {label ? (
-              <label htmlFor={id} className="text-text-muted text-xs font-medium tracking-widest">
+              <label
+                htmlFor={id}
+                className="text-text/70 text-xs font-semibold tracking-widest uppercase"
+              >
                 {label}
               </label>
             ) : null}

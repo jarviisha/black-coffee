@@ -1,14 +1,18 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useForm, useWatch, type Control } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useNavigate, Link } from "react-router"
+import { useNavigate } from "react-router"
 import { useTranslation } from "react-i18next"
 import { Icon } from "@/components/ui/Icon"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
+import { FormAlert } from "@/components/ui/FormAlert"
 import { useAuth } from "../hooks/useAuth"
 import { createRegisterSchema, type RegisterInput } from "../schemas"
-import { getApiErrorMessage } from "@/lib/utils"
+import { cn, getApiErrorMessage } from "@/lib/utils"
+import { AuthHeader } from "./AuthHeader"
+import { AuthSwitchLink } from "./AuthSwitchLink"
+import { PasswordField } from "./PasswordField"
 
 const strengthColors = ["", "bg-strength-1", "bg-strength-2", "bg-strength-3", "bg-strength-4"]
 
@@ -29,21 +33,31 @@ function PasswordStrengthBar({
   labels: string[]
 }) {
   const password = useWatch({ control, name: "password", defaultValue: "" })
-  if (!password) return null
-  const strength = calcStrength(password)
+  const strength = password ? calcStrength(password) : 0
+
+  // Always rendered at a fixed height so typing the first character neither
+  // reveals nor resizes the row — nothing below it moves
   return (
-    <div className="mt-2 flex items-center gap-2">
+    <div
+      className={cn(
+        "duration-base mt-2 flex h-5 items-center gap-2 transition-opacity motion-reduce:transition-none",
+        password ? "opacity-100" : "opacity-0",
+      )}
+    >
       <div className="flex flex-1 gap-1">
         {[1, 2, 3, 4].map((i) => (
           <div
             key={i}
-            className={`duration-slow h-0.5 flex-1 rounded-full transition-all motion-reduce:transition-none ${
-              i <= strength ? strengthColors[strength] : "bg-border"
-            }`}
+            className={cn(
+              "duration-slow h-0.5 flex-1 rounded-full transition-all motion-reduce:transition-none",
+              i <= strength ? strengthColors[strength] : "bg-border",
+            )}
           />
         ))}
       </div>
-      <span className="text-text-muted text-xs">{labels[strength]}</span>
+      <span className="text-text-muted text-xs" aria-live="polite">
+        {password ? labels[strength] : ""}
+      </span>
     </div>
   )
 }
@@ -52,8 +66,6 @@ export function RegisterForm() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { register: registerUser, isRegistering, registerError } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirm, setShowConfirm] = useState(false)
 
   const schema = useMemo(() => createRegisterSchema(t), [t])
 
@@ -82,15 +94,9 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
-      <div className="mb-8">
-        <h1 className="text-text mb-2 text-4xl leading-tight">{t("auth.register.title")}</h1>
-        <p className="text-text-muted text-sm">{t("auth.register.subtitle")}</p>
-      </div>
-      {serverError && (
-        <div className="border-error-border bg-error-fg text-error mb-5 rounded border px-4 py-3 text-sm">
-          {serverError}
-        </div>
-      )}
+      <AuthHeader title={t("auth.register.title")} subtitle={t("auth.register.subtitle")} />
+
+      {serverError && <FormAlert message={serverError} className="mb-5" />}
 
       <Input
         {...register("username")}
@@ -98,6 +104,7 @@ export function RegisterForm() {
         label={t("auth.register.username")}
         type="text"
         autoComplete="username"
+        autoFocus
         placeholder={t("auth.register.usernamePlaceholder")}
         error={errors.username?.message}
         wrapperClassName="mb-5"
@@ -115,49 +122,23 @@ export function RegisterForm() {
       />
 
       <div className="mb-5">
-        <Input
+        <PasswordField
           {...register("password")}
           id="register-password"
           label={t("auth.register.password")}
-          type={showPassword ? "text" : "password"}
           autoComplete="new-password"
           placeholder={t("auth.register.passwordPlaceholder")}
-          suffix={
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setShowPassword((v) => !v)}
-              className="text-text-sub hover:text-text h-auto w-auto p-0 motion-reduce:transition-none"
-              aria-label={t(showPassword ? "auth.hidePassword" : "auth.showPassword")}
-              aria-controls="register-password"
-            >
-              {showPassword ? <Icon name="eye-off" size={16} /> : <Icon name="eye" size={16} />}
-            </Button>
-          }
           error={errors.password?.message}
         />
         <PasswordStrengthBar control={control} labels={strengthLabels} />
       </div>
 
-      <Input
+      <PasswordField
         {...register("confirmPassword")}
         id="register-confirm-password"
         label={t("auth.register.confirmPassword")}
-        type={showConfirm ? "text" : "password"}
         autoComplete="new-password"
-        placeholder={t("auth.register.passwordPlaceholder")}
-        suffix={
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setShowConfirm((v) => !v)}
-            className="text-text-sub hover:text-text h-auto w-auto p-0 motion-reduce:transition-none"
-            aria-label={t(showConfirm ? "auth.hidePassword" : "auth.showPassword")}
-            aria-controls="register-confirm-password"
-          >
-            {showConfirm ? <Icon name="eye-off" size={16} /> : <Icon name="eye" size={16} />}
-          </Button>
-        }
+        placeholder={t("auth.register.confirmPasswordPlaceholder")}
         error={errors.confirmPassword?.message}
         wrapperClassName="mb-7"
       />
@@ -178,15 +159,11 @@ export function RegisterForm() {
         {isRegistering ? t("auth.register.submitting") : t("auth.register.submit")}
       </Button>
 
-      <p className="text-text-muted text-center text-sm">
-        {t("auth.register.hasAccount")}{" "}
-        <Link
-          to="/login"
-          className="text-text font-medium underline-offset-2 transition-colors hover:underline motion-reduce:transition-none"
-        >
-          {t("auth.register.signIn")}
-        </Link>
-      </p>
+      <AuthSwitchLink
+        prompt={t("auth.register.hasAccount")}
+        to="/login"
+        label={t("auth.register.signIn")}
+      />
     </form>
   )
 }

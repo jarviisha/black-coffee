@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate, Link } from "react-router"
@@ -6,15 +6,18 @@ import { useTranslation } from "react-i18next"
 import { Icon } from "@/components/ui/Icon"
 import { Input } from "@/components/ui/Input"
 import { Button } from "@/components/ui/Button"
+import { FormAlert } from "@/components/ui/FormAlert"
 import { useAuth } from "../hooks/useAuth"
 import { createLoginSchema, type LoginInput } from "../schemas"
 import { getApiErrorMessage } from "@/lib/utils"
+import { AuthHeader } from "./AuthHeader"
+import { AuthSwitchLink } from "./AuthSwitchLink"
+import { PasswordField } from "./PasswordField"
 
 export function LoginForm() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { login, isLoggingIn, loginError } = useAuth()
-  const [showPassword, setShowPassword] = useState(false)
 
   const schema = useMemo(() => createLoginSchema(t), [t])
 
@@ -34,16 +37,9 @@ export function LoginForm() {
 
   return (
     <form onSubmit={(e) => void handleSubmit(onSubmit)(e)} noValidate>
-      <div className="mb-8">
-        <h1 className="text-text mb-2 text-4xl leading-tight">{t("auth.login.title")}</h1>
-        <p className="text-text-muted text-sm">{t("auth.login.subtitle")}</p>
-      </div>
+      <AuthHeader title={t("auth.login.title")} subtitle={t("auth.login.subtitle")} />
 
-      {serverError && (
-        <div className="border-error-border bg-error-fg text-error mb-5 rounded border px-4 py-3 text-sm">
-          {serverError}
-        </div>
-      )}
+      {serverError && <FormAlert message={serverError} className="mb-5" />}
 
       <Input
         {...register("username")}
@@ -51,29 +47,25 @@ export function LoginForm() {
         label={t("auth.login.username")}
         type="text"
         autoComplete="username"
+        autoFocus
         placeholder={t("auth.login.usernamePlaceholder")}
         error={errors.username?.message}
         wrapperClassName="mb-5"
       />
 
-      <Input
+      <PasswordField
         {...register("password")}
         id="login-password"
         label={t("auth.login.password")}
-        type={showPassword ? "text" : "password"}
         autoComplete="current-password"
         placeholder={t("auth.login.passwordPlaceholder")}
-        suffix={
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={() => setShowPassword((v) => !v)}
-            className="text-text-sub hover:text-text h-auto w-auto p-0 motion-reduce:transition-none"
-            aria-label={t(showPassword ? "auth.hidePassword" : "auth.showPassword")}
-            aria-controls="login-password"
+        labelAction={
+          <Link
+            to="/forgot-password"
+            className="text-text-muted hover:text-text text-xs underline-offset-2 transition-colors hover:underline motion-reduce:transition-none"
           >
-            {showPassword ? <Icon name="eye-off" size={16} /> : <Icon name="eye" size={16} />}
-          </Button>
+            {t("auth.login.forgot")}
+          </Link>
         }
         error={errors.password?.message}
         wrapperClassName="mb-7"
@@ -95,15 +87,11 @@ export function LoginForm() {
         {isLoggingIn ? t("auth.login.submitting") : t("auth.login.submit")}
       </Button>
 
-      <p className="text-text-muted text-center text-sm">
-        {t("auth.login.noAccount")}{" "}
-        <Link
-          to="/register"
-          className="text-text font-medium underline-offset-2 transition-colors hover:underline motion-reduce:transition-none"
-        >
-          {t("auth.login.createOne")}
-        </Link>
-      </p>
+      <AuthSwitchLink
+        prompt={t("auth.login.noAccount")}
+        to="/register"
+        label={t("auth.login.createOne")}
+      />
     </form>
   )
 }

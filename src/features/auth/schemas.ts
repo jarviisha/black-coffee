@@ -27,5 +27,12 @@ export function createRegisterSchema(t: TFunction) {
     })
 }
 
+export function createForgotPasswordSchema(t: TFunction) {
+  return z.object({
+    email: z.string().email(t("auth.validation.emailInvalid")),
+  })
+}
+
 export type LoginInput = z.infer<ReturnType<typeof createLoginSchema>>
 export type RegisterInput = z.infer<ReturnType<typeof createRegisterSchema>>
+export type ForgotPasswordInput = z.infer<ReturnType<typeof createForgotPasswordSchema>>

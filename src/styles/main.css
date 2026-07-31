@@ -74,6 +74,20 @@
   --duration-slow: 300ms;
 
   --shadow-overlay: 0 25px 50px -12px rgb(0 0 0 / 0.6);
+
+  /* Auth screens — form fades up when switching between login/register/reset */
+  --animate-auth-enter: auth-enter var(--duration-slow) ease-out both;
+}
+
+@keyframes auth-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 *,
