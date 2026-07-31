@@ -2,9 +2,10 @@
 <html lang="vi">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/brand-icon.svg" />
+    <!-- %BRAND_*% are filled from src/config/brand.ts by the brand-html plugin -->
+    <link rel="icon" type="image/svg+xml" href="%BRAND_FAVICON%" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>%VITE_APP_TITLE%</title>
+    <title>%BRAND_NAME%</title>
     <script>
       try {
         var t = JSON.parse(localStorage.getItem("theme") || "{}")

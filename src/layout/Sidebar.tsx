@@ -3,6 +3,7 @@ import { NavLink } from "react-router"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { Icon, type IconName } from "@/components/ui/Icon"
+import { brand } from "@/config/brand"
 import { useAuthStore } from "@/store/authStore"
 import { useComposeStore } from "@/store/composeStore"
 import { ComposeButton } from "@/widgets/ComposeButton"
@@ -58,8 +59,8 @@ export function Sidebar() {
       <div className="flex flex-col gap-8">
         {/* Brand */}
         <div className="flex items-center gap-1 px-2 text-lg font-semibold underline decoration-transparent transition-colors hover:decoration-current">
-          <Icon name="coffee" size={40} />
-          <span>{t("common.brand")}</span>
+          <Icon name={brand.logo} size={40} />
+          <span>{brand.name}</span>
         </div>
 
         {/* Nav links */}
