@@ -31,20 +31,22 @@ export function FormField({
         )}
       >
         {hasLabel ? (
-          <div className="flex items-center justify-between px-4 pt-2.5">
+          <div className="flex min-h-4 items-center px-4 pt-2.5">
             {label ? (
-              <label
-                htmlFor={id}
-                className="text-text/70 text-xs font-semibold tracking-widest uppercase"
-              >
+              <label htmlFor={id} className="text-text/70 text-xs font-semibold tracking-wide">
                 {label}
               </label>
             ) : null}
-            {labelAction}
           </div>
         ) : null}
 
         {children}
+
+        {/* Sits in the label row visually, but comes after the input in the DOM
+            so Tab moves straight to the next field instead of into this action */}
+        {labelAction ? (
+          <div className="absolute top-2.5 right-4 flex min-h-4 items-center">{labelAction}</div>
+        ) : null}
       </div>
 
       {error ? (
