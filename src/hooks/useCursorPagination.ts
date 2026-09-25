@@ -32,7 +32,10 @@ export function useCursorPagination<T>({
   const [items, setItems] = useState<T[]>([])
   const fetchedKeys = useRef(new Set<string>())
   const nextCursorRef = useRef<string | undefined>(undefined)
-  const sentinelRef = useRef<HTMLDivElement>(null)
+  // Callback ref rather than an object ref: callers render the sentinel only
+  // after the first page has been appended, so the observer effect must re-run
+  // when the node actually mounts, not just when `isFetching` changes.
+  const [sentinel, setSentinel] = useState<HTMLDivElement | null>(null)
 
   const appendPage = useCallback(
     (incoming: T[], nextCursor?: string | null) => {
@@ -63,7 +66,7 @@ export function useCursorPagination<T>({
   }, [page, appendPage, resetKey])
 
   useEffect(() => {
-    if (!sentinelRef.current) return
+    if (!sentinel) return
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && nextCursorRef.current && !isFetching) {
@@ -72,9 +75,9 @@ export function useCursorPagination<T>({
       },
       { rootMargin: "200px" },
     )
-    observer.observe(sentinelRef.current)
+    observer.observe(sentinel)
     return () => observer.disconnect()
-  }, [isFetching, onNextPage])
+  }, [sentinel, isFetching, onNextPage])
 
-  return { items, sentinelRef }
+  return { items, sentinelRef: setSentinel }
 }
