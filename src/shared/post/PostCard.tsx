@@ -29,8 +29,9 @@ interface PostCardProps {
 }
 
 export function PostCard({ post, hideFollow }: PostCardProps) {
-  const { liked, likeCount, handleLike } = useOptimisticLike({
+  const { liked, likeCount, canLike, handleLike } = useOptimisticLike({
     postId: post.id,
+    authorId: post.author?.id,
     initialLiked: post.is_liked,
     initialCount: post.like_count,
   })
@@ -59,6 +60,7 @@ export function PostCard({ post, hideFollow }: PostCardProps) {
 
       <PostActions
         postId={post.id}
+        canLike={canLike}
         liked={liked}
         likeCount={likeCount}
         commentCount={post.comment_count ?? 0}

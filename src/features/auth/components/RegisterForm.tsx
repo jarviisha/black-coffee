@@ -16,13 +16,15 @@ import { PasswordField } from "./PasswordField"
 
 const strengthColors = ["", "bg-strength-1", "bg-strength-2", "bg-strength-3", "bg-strength-4"]
 
+// Returns 1-4 for any non-empty password: a short password scored 0 left the
+// meter blank with no label, which read as "no feedback" rather than "weak".
 function calcStrength(password: string): number {
-  let score = 0
+  if (!password) return 0
+  let score = 1
   if (password.length >= 8) score++
   if (password.length >= 12) score++
-  if (/[A-Z]/.test(password)) score++
-  if (/[0-9]/.test(password)) score++
-  return score
+  if (/[A-Z]/.test(password) && /[0-9]/.test(password)) score++
+  return Math.min(score, 4)
 }
 
 function PasswordStrengthBar({
@@ -78,7 +80,7 @@ export function RegisterForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = getApiErrorMessage(registerError)
+  const serverError = registerError ? (getApiErrorMessage(registerError) ?? t("common.error")) : null
 
   const strengthLabels = [
     "",
@@ -99,12 +101,23 @@ export function RegisterForm() {
       {serverError && <FormAlert message={serverError} className="mb-5" />}
 
       <Input
+        {...register("display_name")}
+        id="register-display-name"
+        label={t("auth.register.displayName")}
+        type="text"
+        autoComplete="name"
+        autoFocus
+        placeholder={t("auth.register.displayNamePlaceholder")}
+        error={errors.display_name?.message}
+        wrapperClassName="mb-5"
+      />
+
+      <Input
         {...register("username")}
         id="register-username"
         label={t("auth.register.username")}
         type="text"
         autoComplete="username"
-        autoFocus
         placeholder={t("auth.register.usernamePlaceholder")}
         error={errors.username?.message}
         wrapperClassName="mb-5"

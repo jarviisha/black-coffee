@@ -1,5 +1,5 @@
-import { useState, useRef } from "react"
-import { useNavigate } from "react-router"
+import { useState, useRef, useEffect } from "react"
+import { useNavigate, useBlocker } from "react-router"
 import { useTranslation } from "react-i18next"
 import { useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/Button"
@@ -11,6 +11,7 @@ import { useUploadAvatar } from "@/api/hooks/useUploadAvatar"
 import { useUploadCover } from "@/api/hooks/useUploadCover"
 import { useAuthStore } from "@/store/authStore"
 import { PageHeader } from "@/components/ui/PageHeader"
+import { PageTitle } from "@/components/PageTitle"
 
 export function EditProfilePage() {
   const { t } = useTranslation()
@@ -48,6 +49,43 @@ export function EditProfilePage() {
   const coverInputRef = useRef<HTMLInputElement>(null)
 
   const { mutate: updateProfile, isPending: isProfilePending } = useUpdateMyProfile()
+
+  // Leaving with edited text fields used to discard them without a word.
+  const isDirty =
+    displayName !== (user?.display_name ?? "") ||
+    bio !== (user?.bio ?? "") ||
+    location !== (user?.location ?? "") ||
+    website !== (user?.website ?? "")
+
+  // Read through refs: the blocker callback runs at navigation time, after the
+  // save has already flipped these, so a closed-over value would be stale.
+  const isDirtyRef = useRef(isDirty)
+  const isSavingRef = useRef(false)
+
+  useEffect(() => {
+    isDirtyRef.current = isDirty
+  }, [isDirty])
+
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDirtyRef.current &&
+      !isSavingRef.current &&
+      currentLocation.pathname !== nextLocation.pathname,
+  )
+
+  useEffect(() => {
+    if (blocker.state !== "blocked") return
+    if (window.confirm(t("profile.edit.discardChanges"))) blocker.proceed()
+    else blocker.reset()
+  }, [blocker, t])
+
+  useEffect(() => {
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (isDirtyRef.current && !isSavingRef.current) e.preventDefault()
+    }
+    window.addEventListener("beforeunload", onBeforeUnload)
+    return () => window.removeEventListener("beforeunload", onBeforeUnload)
+  }, [])
   const { mutate: uploadAvatar, isPending: isAvatarPending } = useUploadAvatar()
   const { mutate: uploadCover, isPending: isCoverPending } = useUploadCover()
 
@@ -89,6 +127,7 @@ export function EditProfilePage() {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault()
+    isSavingRef.current = true
     updateProfile(
       {
         data: {
@@ -104,6 +143,9 @@ export function EditProfilePage() {
           invalidateProfileQueries()
           void navigate(-1)
         },
+        onError: () => {
+          isSavingRef.current = false
+        },
       },
     )
   }
@@ -113,6 +155,7 @@ export function EditProfilePage() {
 
   return (
     <div>
+      <PageTitle title={t("profile.edit.title")} />
       <PageHeader title={t("profile.edit.title")} back />
       <div className="relative mx-auto max-w-xl">
         {/* ── Section 1: Photos (immediate upload) ── */}
@@ -151,6 +194,8 @@ export function EditProfilePage() {
             type="file"
             accept="image/jpeg,image/png,image/webp"
             className="sr-only"
+            aria-hidden="true"
+            tabIndex={-1}
             onChange={handleCoverChange}
           />
 
@@ -188,6 +233,8 @@ export function EditProfilePage() {
               type="file"
               accept="image/jpeg,image/png,image/webp"
               className="sr-only"
+              aria-hidden="true"
+              tabIndex={-1}
               onChange={handleAvatarChange}
             />
           </div>

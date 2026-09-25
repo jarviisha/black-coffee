@@ -98,7 +98,17 @@ function MenuSub({ value, children }: MenuSubProps) {
 
   return (
     <MenuSubContext value={{ value, isOpen }}>
-      <div className="relative" onMouseEnter={() => openSub(value)} onMouseLeave={closeSub}>
+      {/* Focus mirrors hover so the submenu is reachable by keyboard: tabbing
+          onto the trigger opens it, tabbing past the last item closes it. */}
+      <div
+        className="relative"
+        onMouseEnter={() => openSub(value)}
+        onMouseLeave={closeSub}
+        onFocus={() => openSub(value)}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node | null)) closeSub()
+        }}
+      >
         {children}
       </div>
     </MenuSubContext>
@@ -109,12 +119,14 @@ type MenuSubTriggerProps = MenuItemProps
 
 function MenuSubTrigger({ children, className, ...props }: MenuSubTriggerProps) {
   const ctx = use(MenuSubContext)
+  const menuCtx = useMenuContext()
   if (!ctx) throw new Error("Menu.SubTrigger must be used inside Menu.Sub")
 
   return (
     <MenuItem
       aria-haspopup="menu"
       aria-expanded={ctx.isOpen}
+      onClick={() => (ctx.isOpen ? menuCtx.closeSub() : menuCtx.openSub(ctx.value))}
       className={cn("rounded-none", ctx.isOpen && "bg-surface-hi text-text", className)}
       {...props}
     >

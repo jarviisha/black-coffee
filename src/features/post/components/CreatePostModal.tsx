@@ -8,9 +8,10 @@ import { cn, getApiErrorMessage } from "@/lib/utils"
 import { Button, ButtonIcon } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
 import { useAuthStore } from "@/store/authStore"
+import { useComposeStore } from "@/store/composeStore"
 import { Avatar } from "@/components/ui/Avatar"
 import { useCreatePost } from "@/api/hooks/useCreatePost"
-import { createPostSchema, type CreatePostInput } from "../schemas"
+import { createPostSchema, MAX_POST_CHARS, type CreatePostInput } from "../schemas"
 import { useMediaUpload, ACCEPTED_MEDIA_TYPES } from "../hooks/useMediaUpload"
 import { useAutocomplete } from "../hooks/useAutocomplete"
 import { useEmojiPicker } from "../hooks/useEmojiPicker"
@@ -22,8 +23,6 @@ import { UserInfo } from "@/components/ui/UserInfo"
 import ReactEmojiPicker, { type EmojiClickData, Theme } from "emoji-picker-react"
 import { useThemeStore } from "@/store/themeStore"
 
-const MAX_CHARS = 515
-
 interface CreatePostModalProps {
   onClose: () => void
 }
@@ -32,13 +31,14 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
   const { t } = useTranslation()
   const queryClient = useQueryClient()
   const user = useAuthStore((s) => s.user)
+  const markPosted = useComposeStore((s) => s.markPosted)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const modalBodyRef = useRef<HTMLDivElement>(null)
 
   const [submitError, setSubmitError] = useState<string | null>(null)
   const theme = useThemeStore((s) => s.theme)
 
-  const schema = useMemo(() => createPostSchema(t, MAX_CHARS), [t])
+  const schema = useMemo(() => createPostSchema(t, MAX_POST_CHARS), [t])
   const {
     register,
     handleSubmit,
@@ -167,6 +167,8 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
           void queryClient.invalidateQueries({
             queryKey: [{ url: "/users/:userID/posts", params: { userID: user?.id } }],
           })
+          void queryClient.invalidateQueries({ queryKey: [{ url: "/feed" }] })
+          markPosted()
           onClose()
         },
         onError: (err) => setSubmitError(getApiErrorMessage(err) ?? t("compose.error")),
@@ -332,9 +334,9 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
 
             <div className="flex items-center gap-3">
               <span
-                className={cn("text-xs", charCount > MAX_CHARS ? "text-error" : "text-text-sub")}
+                className={cn("text-xs", charCount > MAX_POST_CHARS ? "text-error" : "text-text-sub")}
               >
-                {charCount}/{MAX_CHARS}
+                {charCount}/{MAX_POST_CHARS}
               </span>
               <Button
                 type="submit"
@@ -343,7 +345,7 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
                 color="accent"
                 className="w-20"
                 isLoading={isCreating}
-                disabled={isUploading || charCount === 0 || charCount > MAX_CHARS}
+                disabled={isUploading || charCount === 0 || charCount > MAX_POST_CHARS}
               >
                 {t("compose.submit")}
               </Button>

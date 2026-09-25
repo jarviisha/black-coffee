@@ -27,7 +27,7 @@ export function ForgotPasswordForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = getApiErrorMessage(error)
+  const serverError = error ? (getApiErrorMessage(error) ?? t("common.error")) : null
 
   const onSubmit = (data: ForgotPasswordInput) => {
     mutate({ data })

@@ -12,11 +12,27 @@ function getLocale() {
   return DATE_FNS_LOCALES[lang as keyof typeof DATE_FNS_LOCALES] ?? enUS
 }
 
-/** Extract a user-facing message from an API error response */
+/**
+ * Extract a user-facing message from an API error response.
+ *
+ * darkvoid nests failures as { error: { code, message, details } }; the flat
+ * { message } shape is kept as a fallback for endpoints that still return it.
+ * Returns null when the response carries no usable message (network error,
+ * timeout, 5xx with an empty body) — callers must supply their own fallback.
+ */
 export function getApiErrorMessage(error: unknown): string | null {
   if (!isAxiosError(error)) return null
-  const message = (error.response?.data as { message?: unknown } | undefined)?.message
-  return typeof message === "string" ? message : null
+  const data = error.response?.data as
+    | { message?: unknown; error?: { message?: unknown } }
+    | undefined
+  const message = data?.error?.message ?? data?.message
+  return typeof message === "string" && message.length > 0 ? message : null
+}
+
+/** HTTP status of an API error, or null if it never reached the server. */
+export function getApiErrorStatus(error: unknown): number | null {
+  if (!isAxiosError(error)) return null
+  return error.response?.status ?? null
 }
 
 /** Safely merge Tailwind classes */

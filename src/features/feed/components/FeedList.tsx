@@ -1,8 +1,10 @@
 import { useState } from "react"
+import { Link } from "react-router"
 import { useTranslation } from "react-i18next"
 import { useGetFeed } from "@/api/hooks/useGetFeed"
 import { PostCard } from "@/shared/post/PostCard"
 import { Spinner } from "@/components/ui/Spinner"
+import { Button } from "@/components/ui/Button"
 import { useAuthStore } from "@/store/authStore"
 import { useCursorPagination } from "@/hooks/useCursorPagination"
 import type { HandlerFeedItemResponse } from "@/api/models/handler/FeedItemResponse"
@@ -12,9 +14,10 @@ export function FeedList() {
   const isInitialized = useAuthStore((s) => s.isInitialized)
   const [cursor, setCursor] = useState<string | undefined>(undefined)
 
-  const { data, isLoading, isFetching, isError } = useGetFeed(cursor ? { cursor } : undefined, {
-    query: { enabled: isInitialized },
-  })
+  const { data, isLoading, isFetching, isError, refetch } = useGetFeed(
+    cursor ? { cursor } : undefined,
+    { query: { enabled: isInitialized } },
+  )
 
   const { items, sentinelRef } = useCursorPagination<HandlerFeedItemResponse>({
     cursor,
@@ -28,11 +31,28 @@ export function FeedList() {
   }
 
   if (isError && items.length === 0) {
-    return <div className="text-text-muted py-16 text-center text-sm">{t("feed.error")}</div>
+    return (
+      <div className="flex flex-col items-center gap-4 py-16">
+        <p className="text-text-muted text-sm">{t("feed.error")}</p>
+        <Button variant="outline" size="sm" onClick={() => void refetch()} disabled={isFetching}>
+          {t("common.retry")}
+        </Button>
+      </div>
+    )
   }
 
   if (!isLoading && items.length === 0) {
-    return <div className="text-text-muted py-16 text-center text-sm">{t("feed.empty")}</div>
+    return (
+      <div className="flex flex-col items-center gap-4 py-16">
+        <p className="text-text-muted text-sm">{t("feed.empty")}</p>
+        <Link
+          to="/discover"
+          className="text-text text-sm font-medium underline-offset-2 transition-colors hover:underline motion-reduce:transition-none"
+        >
+          {t("nav.discover")}
+        </Link>
+      </div>
+    )
   }
 
   return (

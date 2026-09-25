@@ -20,9 +20,21 @@ setConfig({ baseURL: BASE_URL })
 // so both must be kept in sync.
 axiosInstance.defaults.baseURL = BASE_URL
 axiosInstance.defaults.withCredentials = true
+// Without a timeout a stalled backend leaves buttons stuck in their pending
+// state forever (observed: a dev API that swung between 0.6s and 15s).
+axiosInstance.defaults.timeout = 20_000
+
+// Uploads move real bytes and routinely outlast a JSON call. Kubb's RequestConfig
+// has no timeout field, so the exception is applied here rather than per call site.
+const UPLOAD_TIMEOUT_MS = 120_000
+const UPLOAD_PATHS = ["/media/upload", "/me/avatar", "/me/cover"]
 
 // ─── Request interceptor: attach access token ───────────────────────────
 axiosInstance.interceptors.request.use((config) => {
+  if (UPLOAD_PATHS.some((path) => config.url?.includes(path))) {
+    config.timeout = UPLOAD_TIMEOUT_MS
+  }
+
   // Skip auth header for refresh endpoint — server authenticates via HttpOnly cookie
   if (config.url?.includes("/auth/refresh")) return config
 

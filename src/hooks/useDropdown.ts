@@ -15,8 +15,19 @@ export function useDropdown() {
         setOpen(false)
       }
     }
+    // Escape is the expected way out of an open popup; without it the only way
+    // to dismiss is a pointer, which strands keyboard users inside the menu.
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return
+      setOpen(false)
+      triggerRef.current?.focus()
+    }
     document.addEventListener("pointerdown", onPointerDown)
-    return () => document.removeEventListener("pointerdown", onPointerDown)
+    document.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown)
+      document.removeEventListener("keydown", onKeyDown)
+    }
   }, [open])
 
   return { open, setOpen, panelRef, triggerRef }

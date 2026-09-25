@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { cn, timeAgo } from "@/lib/utils"
+import { toast } from "sonner"
+import { cn, timeAgo, getApiErrorMessage } from "@/lib/utils"
 import { Avatar } from "@/components/ui/Avatar"
 import { LinkedUserInfo } from "@/components/ui/UserInfo"
 import { Icon } from "@/components/ui/Icon"
 import { Spinner } from "@/components/ui/Spinner"
 import { useToggleCommentLike } from "@/api/hooks/useToggleCommentLike"
 import { useGetReplies } from "@/api/hooks/useGetReplies"
+import { useAuthStore } from "@/store/authStore"
 import { CommentInput } from "./CommentInput"
 import type { DtoCommentResponse } from "@/api/models/dto/CommentResponse"
 
@@ -25,6 +27,7 @@ interface CommentItemProps {
 
 export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
   const { t } = useTranslation()
+  const currentUserId = useAuthStore((s) => s.user?.id)
   const [isLiked, setIsLiked] = useState(comment.is_liked ?? false)
   const [likeCount, setLikeCount] = useState(comment.like_count ?? 0)
   const [isReplying, setIsReplying] = useState(false)
@@ -49,6 +52,8 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
   const hasVisibleReplies = displayReplies.length > 0
 
   const timeAgoStr = comment.created_at ? timeAgo(comment.created_at) : null
+  // Same rule as posts: the server rejects liking your own comment.
+  const canLike = !currentUserId || currentUserId !== (comment.author?.id ?? comment.author_id)
 
   const handleLike = () => {
     if (!comment.id) return
@@ -61,9 +66,10 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
         onSuccess: (data) => {
           setIsLiked(data.liked)
         },
-        onError: () => {
+        onError: (err) => {
           setIsLiked(!next)
           setLikeCount((c) => c + (next ? -1 : 1))
+          toast.error(getApiErrorMessage(err) ?? t("common.error"))
         },
       },
     )
@@ -101,18 +107,30 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
 
         {/* Actions */}
         <div className="text-text-muted mt-2 flex items-center gap-4">
-          <button
-            onClick={handleLike}
-            aria-label={isLiked ? t("comment.unlike") : t("comment.like")}
-            aria-pressed={isLiked}
-            className={cn(
-              "hover:text-error flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none",
-              isLiked && "text-error",
-            )}
-          >
-            <Icon name={isLiked ? "heart-fill" : "heart"} size={15} aria-hidden="true" />
-            {likeCount > 0 && <span aria-hidden="true">{formatCount(likeCount)}</span>}
-          </button>
+          {canLike ? (
+            <button
+              onClick={handleLike}
+              aria-label={isLiked ? t("comment.unlike") : t("comment.like")}
+              aria-pressed={isLiked}
+              className={cn(
+                "hover:text-error flex items-center gap-1 text-xs font-medium transition-colors motion-reduce:transition-none",
+                isLiked && "text-error",
+              )}
+            >
+              <Icon name={isLiked ? "heart-fill" : "heart"} size={15} aria-hidden="true" />
+              {likeCount > 0 && <span aria-hidden="true">{formatCount(likeCount)}</span>}
+            </button>
+          ) : (
+            <span
+              className={cn(
+                "flex items-center gap-1 text-xs font-medium",
+                isLiked && "text-error",
+              )}
+            >
+              <Icon name={isLiked ? "heart-fill" : "heart"} size={15} aria-hidden="true" />
+              {likeCount > 0 && <span>{formatCount(likeCount)}</span>}
+            </span>
+          )}
 
           <button
             onClick={() => setIsReplying((v) => !v)}

@@ -6,6 +6,8 @@ import { formatDateTime, formatCount } from "@/lib/utils"
 
 interface PostActionsProps {
   postId?: string
+  /** False on your own posts — the server rejects self-likes. */
+  canLike?: boolean
   liked: boolean
   likeCount: number
   commentCount: number
@@ -13,8 +15,12 @@ interface PostActionsProps {
   onLike: () => void
 }
 
+// Icons stay at 20px; the touch area around them is padded out to ~44px.
+const TAP_TARGET = "-m-2.5 flex h-11 w-11 items-center justify-center"
+
 export function PostActions({
   postId,
+  canLike = true,
   liked,
   likeCount,
   commentCount,
@@ -27,18 +33,23 @@ export function PostActions({
     <div className="text-text-muted flex items-center justify-between">
       <div className="flex items-center gap-5">
         <div
-          aria-pressed={liked}
-          className={`hover:text-like flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none ${liked ? "text-like" : ""}`}
+          aria-pressed={canLike ? liked : undefined}
+          className={`flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none ${liked ? "text-like" : ""} ${canLike ? "hover:text-like" : ""}`}
         >
-          <ButtonIcon
-            onClick={onLike}
-            name={liked ? "heart-fill" : "heart"}
-            iconSize={20}
-            aria-label={liked ? t("post.unlike") : t("post.like")}
-          />
-          <span aria-hidden="true" className="cursor-pointer hover:underline">
-            {formatCount(likeCount)}
-          </span>
+          {canLike ? (
+            <ButtonIcon
+              onClick={onLike}
+              name={liked ? "heart-fill" : "heart"}
+              iconSize={20}
+              aria-label={liked ? t("post.unlike") : t("post.like")}
+              className={TAP_TARGET}
+            />
+          ) : (
+            <span className={TAP_TARGET}>
+              <Icon name={liked ? "heart-fill" : "heart"} size={20} />
+            </span>
+          )}
+          <span aria-hidden="true">{formatCount(likeCount)}</span>
         </div>
 
         <Link
@@ -46,7 +57,9 @@ export function PostActions({
           aria-label={t("post.comments", { count: commentCount })}
           className="hover:text-text flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none"
         >
-          <Icon name="message-circle" size={20} />
+          <span className={TAP_TARGET}>
+            <Icon name="message-circle" size={20} />
+          </span>
           <span aria-hidden="true">{formatCount(commentCount)}</span>
         </Link>
       </div>

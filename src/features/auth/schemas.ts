@@ -13,11 +13,27 @@ export function createLoginSchema(t: TFunction) {
 export function createRegisterSchema(t: TFunction) {
   return z
     .object({
+      display_name: z
+        .string()
+        .min(1, t("auth.validation.required"))
+        .max(50, t("auth.validation.displayNameMax")),
       username: z
         .string()
         .min(3, t("auth.validation.usernameMin"))
         .max(30, t("auth.validation.usernameMax")),
       email: z.string().email(t("auth.validation.emailInvalid")),
+      password: z.string().min(8, t("auth.validation.passwordMin")),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.validation.passwordMismatch"),
+      path: ["confirmPassword"],
+    })
+}
+
+export function createResetPasswordSchema(t: TFunction) {
+  return z
+    .object({
       password: z.string().min(8, t("auth.validation.passwordMin")),
       confirmPassword: z.string(),
     })
@@ -36,3 +52,4 @@ export function createForgotPasswordSchema(t: TFunction) {
 export type LoginInput = z.infer<ReturnType<typeof createLoginSchema>>
 export type RegisterInput = z.infer<ReturnType<typeof createRegisterSchema>>
 export type ForgotPasswordInput = z.infer<ReturnType<typeof createForgotPasswordSchema>>
+export type ResetPasswordInput = z.infer<ReturnType<typeof createResetPasswordSchema>>

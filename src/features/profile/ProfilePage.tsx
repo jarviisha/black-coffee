@@ -13,6 +13,7 @@ import { UserPostsList } from "./components/UserPostsList"
 import { Button } from "@/components/ui/Button"
 import { Spinner } from "@/components/ui/Spinner"
 import { PageHeader } from "@/components/ui/PageHeader"
+import { PageTitle } from "@/components/PageTitle"
 
 type Tab = "posts" | "media"
 
@@ -77,6 +78,7 @@ export function ProfilePage() {
   if (isError || !user) {
     return (
       <div className="relative mx-auto max-w-xl">
+        <PageTitle title={t("profile.notFound")} />
         <div className="text-text-muted py-20 text-center text-sm">{t("profile.notFound")}</div>
       </div>
     )
@@ -84,6 +86,9 @@ export function ProfilePage() {
 
   return (
     <div>
+      <PageTitle
+        title={user.display_name ? `${user.display_name} (@${user.username})` : user.username}
+      />
       <PageHeader title={user.username ?? ""} back />
       <div className="relative mx-auto max-w-xl">
         <div className="mt-4">

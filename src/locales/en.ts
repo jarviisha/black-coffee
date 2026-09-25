@@ -3,13 +3,17 @@ const en = {
     back: "Back",
     post: "Post",
     clear: "Clear",
-    tagline: "Share your perspective. Brew your stories. Connect over ideas.",
+    retry: "Try again",
+    error: "Something went wrong. Please try again.",
     copyright: "© {{year}} {{brand}}",
-    features: {
-      authentic: "Authentic conversations",
-      follow: "Follow the voices you love",
-      feed: "Your feed, your rules",
-    },
+  },
+
+  error: {
+    notFoundTitle: "Page not found",
+    notFoundSubtitle: "The link may be broken, or the page may have been removed.",
+    unexpectedTitle: "Something broke",
+    unexpectedSubtitle: "An unexpected error stopped this page from loading.",
+    backHome: "Back home",
   },
 
   nav: {
@@ -18,7 +22,6 @@ const en = {
     notifications: "Notifications",
     profile: "Profile",
     logout: "Log out",
-    privacySettings: "Privacy settings",
     displaySettings: "Display settings",
     language: "Language",
     theme: "Theme",
@@ -43,13 +46,8 @@ const en = {
     register: {
       title: "Register",
       subtitle: "Create your account and start sharing.",
-      leftTitle: "start\nbrewing.",
-      leftSubtitle: "Every great conversation starts with a single thought. What's yours?",
-      features: {
-        free: "Free to join, forever",
-        noAds: "No ads. No noise.",
-        real: "Just real people talking",
-      },
+      displayName: "Display Name",
+      displayNamePlaceholder: "Your name",
       username: "Username",
       usernamePlaceholder: "Choose a username",
       email: "Email",
@@ -76,6 +74,30 @@ const en = {
       rememberedPrompt: "Remembered it?",
       backToLogin: "Back to sign in",
     },
+    resetPassword: {
+      title: "Choose a new password",
+      subtitle: "Pick something you haven't used here before.",
+      password: "New password",
+      passwordPlaceholder: "Enter a new password",
+      confirmPassword: "Confirm password",
+      confirmPasswordPlaceholder: "Re-enter the new password",
+      submit: "Reset password",
+      submitting: "Resetting…",
+      doneTitle: "Password updated",
+      doneSubtitle: "You can now sign in with your new password.",
+      invalidTitle: "This link is incomplete",
+      invalidSubtitle: "The reset link is missing its token, so it can't be used.",
+      invalidPrompt: "Need another one?",
+      requestNew: "Request a new link",
+    },
+    verifyEmail: {
+      title: "Verifying your email",
+      pending: "One moment…",
+      successTitle: "Email verified",
+      successSubtitle: "Your address is confirmed — you're all set.",
+      failedTitle: "We couldn't verify this link",
+      failedSubtitle: "The link may have expired or already been used.",
+    },
     strength: {
       weak: "Weak",
       fair: "Fair",
@@ -92,6 +114,7 @@ const en = {
       passwordMin: "Password must be at least 8 characters",
       usernameMin: "Username must be at least 3 characters",
       usernameMax: "Username must be at most 30 characters",
+      displayNameMax: "Display name must be at most 50 characters",
       emailInvalid: "Invalid email address",
       passwordMismatch: "Passwords do not match",
     },
@@ -171,7 +194,7 @@ const en = {
     },
     validation: {
       contentRequired: "Content cannot be empty",
-      contentMax: "Maximum 280 characters",
+      contentMax: "Maximum {{max}} characters",
     },
   },
 
@@ -226,6 +249,7 @@ const en = {
       website: "Website",
       websitePlaceholder: "https://yoursite.com",
       save: "Save changes",
+      discardChanges: "You have unsaved changes. Leave without saving?",
     },
   },
 } as const

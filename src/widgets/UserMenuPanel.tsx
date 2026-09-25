@@ -36,17 +36,6 @@ export function UserMenuPanel({ menuRef, onClose }: UserMenuPanelProps) {
     <div ref={menuRef} className="absolute right-0 bottom-full z-50 mb-2 w-60">
       <Menu.Root>
         <Menu.Content>
-          {/* Privacy settings */}
-          <Menu.Item
-            onClick={onClose}
-            leftIcon={<Icon name="lock" size={16} aria-hidden="true" />}
-            className="rounded-b-none"
-          >
-            {t("nav.privacySettings")}
-          </Menu.Item>
-
-          <Menu.Separator />
-
           {/* Language — submenu */}
           <Menu.Sub value="language">
             <Menu.SubTrigger

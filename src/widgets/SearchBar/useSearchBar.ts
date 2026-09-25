@@ -31,7 +31,10 @@ export function useSearchBar() {
 
   const showRecent = focused && query.trim() === "" && recent.length > 0
   const showSearch = focused && isSearching
-  const showDropdown = showRecent || showSearch
+  // One typed character gives no feedback at all otherwise — the dropdown just
+  // stays closed and the search looks broken.
+  const showMinLength = focused && query.trim().length > 0 && !isSearching
+  const showDropdown = showRecent || showSearch || showMinLength
 
   // Close on outside click
   useEffect(() => {
@@ -159,6 +162,7 @@ export function useSearchBar() {
     recent,
     activeIndex,
     debouncedQuery,
+    showMinLength,
     isLoading,
     data,
     hasUsers,

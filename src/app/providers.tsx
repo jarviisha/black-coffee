@@ -25,8 +25,15 @@ function AuthInitializer() {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10_000)
 
-    // Skip refresh on guest pages — no session to restore
-    const guestPaths = ["/login", "/register"]
+    // Skip refresh on pages reachable without a session — nothing to restore,
+    // and on the emailed landing pages a 401 here would be pure noise.
+    const guestPaths = [
+      "/login",
+      "/register",
+      "/forgot-password",
+      "/reset-password",
+      "/verify-email",
+    ]
     if (guestPaths.includes(window.location.pathname)) {
       setInitialized()
       return

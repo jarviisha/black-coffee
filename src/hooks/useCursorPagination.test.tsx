@@ -67,6 +67,33 @@ function ListHarness({
   )
 }
 
+/** Same shape as ListHarness, but drives the cursor so pages 2+ can be fed in. */
+function PagedHarness({
+  cursor,
+  page,
+  isFetching,
+  onNextPage,
+}: {
+  cursor: string | undefined
+  page?: Page
+  isFetching: boolean
+  onNextPage: (cursor: string) => void
+}) {
+  const { items, sentinelRef } = useCursorPagination<Item>({
+    cursor,
+    onNextPage,
+    isFetching,
+    page,
+  })
+
+  return (
+    <div>
+      <div data-testid="ids">{items.map((i) => i.id).join(",")}</div>
+      <div data-testid="sentinel" ref={sentinelRef} />
+    </div>
+  )
+}
+
 describe("useCursorPagination", () => {
   beforeEach(() => {
     MockIntersectionObserver.instances = []
@@ -165,5 +192,82 @@ describe("useCursorPagination", () => {
     activeObserver()!.trigger(true)
 
     expect(onNextPage).not.toHaveBeenCalled()
+  })
+
+  // The dev backend re-serves the previous page when handed its own next_cursor,
+  // and never returns a null cursor — without these guards the list duplicates
+  // every post and the sentinel keeps asking for more forever.
+  it("drops rows a later page repeats and stops paginating when nothing is new", () => {
+    const onNextPage = vi.fn()
+    const page1 = { data: [{ id: "p1" }, { id: "p2" }], next_cursor: "c2" }
+    const { rerender } = render(
+      <PagedHarness cursor={undefined} page={page1} isFetching={false} onNextPage={onNextPage} />,
+    )
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2")
+
+    // Page 2 under cursor "c2" hands back exactly page 1 again, cursor and all.
+    rerender(
+      <PagedHarness
+        cursor="c2"
+        page={{ data: [{ id: "p1" }, { id: "p2" }], next_cursor: "c3" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2")
+    activeObserver()!.trigger(true)
+    expect(onNextPage).not.toHaveBeenCalled()
+  })
+
+  it("keeps the new rows of a partially overlapping page", () => {
+    const onNextPage = vi.fn()
+    const { rerender } = render(
+      <PagedHarness
+        cursor={undefined}
+        page={{ data: [{ id: "p1" }, { id: "p2" }], next_cursor: "c2" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+
+    rerender(
+      <PagedHarness
+        cursor="c2"
+        page={{ data: [{ id: "p2" }, { id: "p3" }], next_cursor: "c3" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2,p3")
+    activeObserver()!.trigger(true)
+    expect(onNextPage).toHaveBeenCalledWith("c3")
+  })
+
+  // Creating a post refetches page one; if the hook skipped it as "already
+  // seen", the new post stayed invisible until a manual reload.
+  it("replaces the first page when it is refetched", () => {
+    const onNextPage = vi.fn()
+    const { rerender } = render(
+      <PagedHarness
+        cursor={undefined}
+        page={{ data: [{ id: "p1" }], next_cursor: "c2" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1")
+
+    rerender(
+      <PagedHarness
+        cursor={undefined}
+        page={{ data: [{ id: "p2" }, { id: "p1" }], next_cursor: "c2" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+
+    expect(screen.getByTestId("ids")).toHaveTextContent("p2,p1")
   })
 })

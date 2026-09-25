@@ -28,8 +28,17 @@ export function useAuth() {
         },
       ),
     register: (input: RegisterInput, opts?: { onSuccess?: () => void }) =>
+      // The API rejects unknown fields outright, so the confirmation copy of the
+      // password stays in the form and never goes over the wire.
       registerMutation.mutate(
-        { data: input },
+        {
+          data: {
+            display_name: input.display_name,
+            username: input.username,
+            email: input.email,
+            password: input.password,
+          },
+        },
         {
           onSuccess: (data) => {
             void (async () => {

@@ -5,13 +5,17 @@ const vi: Translations = {
     back: "Quay lại",
     post: "Bài viết",
     clear: "Xóa",
-    tagline: "Chia sẻ góc nhìn của bạn. Ủ nên câu chuyện. Kết nối qua ý tưởng.",
+    retry: "Thử lại",
+    error: "Đã có lỗi xảy ra. Vui lòng thử lại.",
     copyright: "© {{year}} {{brand}}",
-    features: {
-      authentic: "Những cuộc trò chuyện thật sự",
-      follow: "Theo dõi những giọng nói bạn yêu thích",
-      feed: "Feed của bạn, luật của bạn",
-    },
+  },
+
+  error: {
+    notFoundTitle: "Không tìm thấy trang",
+    notFoundSubtitle: "Liên kết có thể đã hỏng hoặc trang đã bị gỡ.",
+    unexpectedTitle: "Đã xảy ra sự cố",
+    unexpectedSubtitle: "Một lỗi không mong muốn khiến trang không tải được.",
+    backHome: "Về trang chủ",
   },
 
   nav: {
@@ -20,7 +24,6 @@ const vi: Translations = {
     notifications: "Thông báo",
     profile: "Trang cá nhân",
     logout: "Đăng xuất",
-    privacySettings: "Cài đặt quyền riêng tư",
     displaySettings: "Cài đặt hiển thị",
     language: "Ngôn ngữ",
     theme: "Giao diện",
@@ -45,13 +48,8 @@ const vi: Translations = {
     register: {
       title: "Đăng ký",
       subtitle: "Tạo tài khoản và bắt đầu chia sẻ.",
-      leftTitle: "bắt đầu\nbây giờ.",
-      leftSubtitle: "Mỗi cuộc trò chuyện hay đều bắt đầu từ một ý nghĩ. Của bạn là gì?",
-      features: {
-        free: "Miễn phí mãi mãi",
-        noAds: "Không quảng cáo. Không ồn ào.",
-        real: "Chỉ là những người thật sự trò chuyện",
-      },
+      displayName: "Tên hiển thị",
+      displayNamePlaceholder: "Tên của bạn",
       username: "Tên đăng nhập",
       usernamePlaceholder: "Chọn một tên đăng nhập",
       email: "Email",
@@ -78,6 +76,30 @@ const vi: Translations = {
       rememberedPrompt: "Đã nhớ ra mật khẩu?",
       backToLogin: "Quay lại đăng nhập",
     },
+    resetPassword: {
+      title: "Chọn mật khẩu mới",
+      subtitle: "Hãy chọn mật khẩu bạn chưa từng dùng ở đây.",
+      password: "Mật khẩu mới",
+      passwordPlaceholder: "Nhập mật khẩu mới",
+      confirmPassword: "Xác nhận mật khẩu",
+      confirmPasswordPlaceholder: "Nhập lại mật khẩu mới",
+      submit: "Đặt lại mật khẩu",
+      submitting: "Đang đặt lại…",
+      doneTitle: "Đã cập nhật mật khẩu",
+      doneSubtitle: "Bạn có thể đăng nhập bằng mật khẩu mới.",
+      invalidTitle: "Liên kết không đầy đủ",
+      invalidSubtitle: "Liên kết đặt lại thiếu token nên không dùng được.",
+      invalidPrompt: "Cần liên kết khác?",
+      requestNew: "Gửi lại liên kết",
+    },
+    verifyEmail: {
+      title: "Đang xác minh email",
+      pending: "Chờ một chút…",
+      successTitle: "Đã xác minh email",
+      successSubtitle: "Địa chỉ của bạn đã được xác nhận.",
+      failedTitle: "Không xác minh được liên kết này",
+      failedSubtitle: "Liên kết có thể đã hết hạn hoặc đã được dùng.",
+    },
     strength: {
       weak: "Yếu",
       fair: "Trung bình",
@@ -94,6 +116,7 @@ const vi: Translations = {
       passwordMin: "Mật khẩu tối thiểu 8 ký tự",
       usernameMin: "Tên đăng nhập tối thiểu 3 ký tự",
       usernameMax: "Tên đăng nhập tối đa 30 ký tự",
+      displayNameMax: "Tên hiển thị tối đa 50 ký tự",
       emailInvalid: "Email không hợp lệ",
       passwordMismatch: "Mật khẩu không khớp",
     },
@@ -173,7 +196,7 @@ const vi: Translations = {
     },
     validation: {
       contentRequired: "Nội dung không được để trống",
-      contentMax: "Tối đa 280 ký tự",
+      contentMax: "Tối đa {{max}} ký tự",
     },
   },
 
@@ -228,6 +251,7 @@ const vi: Translations = {
       website: "Website",
       websitePlaceholder: "https://website.com",
       save: "Lưu thay đổi",
+      discardChanges: "Bạn có thay đổi chưa lưu. Rời trang mà không lưu?",
     },
   },
 }
