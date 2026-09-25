@@ -9,19 +9,19 @@ interface UseOptimisticFollowOptions {
 
 export function useOptimisticFollow({ authorId, initialFollowing }: UseOptimisticFollowOptions) {
   const currentUserId = useAuthStore((s) => s.user?.id)
-  const followedIds = useFollowStore((s) => s.followedIds)
-  const markFollowed = useFollowStore((s) => s.markFollowed)
-  const unmarkFollowed = useFollowStore((s) => s.unmarkFollowed)
+  const override = useFollowStore((s) => (authorId ? s.overrides[authorId] : undefined))
+  const setFollowing = useFollowStore((s) => s.setFollowing)
   const { mutate: followUser, isPending } = useFollowUser()
 
-  const isFollowing = (authorId && followedIds.has(authorId)) || initialFollowing || false
+  // A session override always wins over the flag baked into the post payload.
+  const isFollowing = override ?? initialFollowing ?? false
   const isOwnPost = !!currentUserId && currentUserId === authorId
   const showFollow = !isOwnPost && !isFollowing
 
   const handleFollow = () => {
     if (!authorId || isPending) return
-    markFollowed(authorId)
-    followUser({ userKey: authorId }, { onError: () => unmarkFollowed(authorId) })
+    setFollowing(authorId, true)
+    followUser({ userKey: authorId }, { onError: () => setFollowing(authorId, false) })
   }
 
   return { showFollow, isPending, handleFollow }

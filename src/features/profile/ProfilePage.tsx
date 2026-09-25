@@ -1,11 +1,13 @@
-import { useState } from "react"
-import { useParams, useNavigate, useSearchParams } from "react-router"
+import { useEffect } from "react"
+import { useParams, useNavigate, useSearchParams, useLocation } from "react-router"
 import { useTranslation } from "react-i18next"
 import { cn } from "@/lib/utils"
 import { useGetUserProfile } from "@/api/hooks/useGetUserProfile"
 import { useFollowUser } from "@/api/hooks/useFollowUser"
 import { useUnfollowUser } from "@/api/hooks/useUnfollowUser"
 import { useAuthStore } from "@/store/authStore"
+import { useFollowStore } from "@/store/followStore"
+import { decodedProfilePath } from "./profilePath"
 import { ProfileHeader } from "./components/ProfileHeader"
 import { UserPostsList } from "./components/UserPostsList"
 import { Button } from "@/components/ui/Button"
@@ -28,39 +30,40 @@ export function ProfilePage() {
   } = useGetUserProfile(username!, { by: "username" }, { query: { enabled: !!username } })
 
   const navigate = useNavigate()
+  const { pathname, search, hash } = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const activeTab = (searchParams.get("tab") as Tab | null) ?? "posts"
 
-  // Optimistic follow state — keyed by username to reset on profile navigation
-  const [localFollow, setLocalFollow] = useState<{
-    forUsername: string
-    isFollowing: boolean
-    followerCount: number
-  } | null>(null)
+  // Restore the `@` form of the URL after a hard load — see decodedProfilePath.
+  // Client-side only, so it never hits the server and never redirects back.
+  useEffect(() => {
+    const decoded = decodedProfilePath(pathname)
+    if (decoded) void navigate(`${decoded}${search}${hash}`, { replace: true })
+  }, [pathname, search, hash, navigate])
+
+  // Follow state is shared with the post cards below — see followStore.
+  const followOverride = useFollowStore((s) => (user?.id ? s.overrides[user.id] : undefined))
+  const setFollowing = useFollowStore((s) => s.setFollowing)
 
   const { mutate: followUser, isPending: isFollowPending } = useFollowUser()
   const { mutate: unfollowUser, isPending: isUnfollowPending } = useUnfollowUser()
 
   const isOwnProfile = currentUser?.username === username
 
-  // Use optimistic values when available for the current profile, else fall back to server data
-  const hasLocalFollow = localFollow !== null && localFollow.forUsername === username
-  const isFollowing = hasLocalFollow ? localFollow.isFollowing : (user?.is_following ?? false)
-  const followerCount = hasLocalFollow ? localFollow.followerCount : (user?.follower_count ?? 0)
+  const serverFollowing = user?.is_following ?? false
+  const isFollowing = followOverride ?? serverFollowing
+  // The server count already accounts for serverFollowing, so only adjust it
+  // while a session override disagrees with what the server last told us.
+  const followerCount =
+    (user?.follower_count ?? 0) + (isFollowing === serverFollowing ? 0 : isFollowing ? 1 : -1)
 
   const handleFollowToggle = () => {
     if (!user?.id) return
+    const userId = user.id
     const next = !isFollowing
-    const nextCount = followerCount + (next ? 1 : -1)
-    setLocalFollow({ forUsername: username!, isFollowing: next, followerCount: nextCount })
+    setFollowing(userId, next)
     const mutation = next ? followUser : unfollowUser
-    mutation(
-      { userKey: user.id },
-      {
-        onError: () =>
-          setLocalFollow({ forUsername: username!, isFollowing: !next, followerCount }),
-      },
-    )
+    mutation({ userKey: userId }, { onError: () => setFollowing(userId, !next) })
   }
 
   if (isLoading) {

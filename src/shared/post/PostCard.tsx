@@ -21,9 +21,14 @@ type PostCardItem = {
 
 interface PostCardProps {
   post: PostCardItem
+  /**
+   * Suppress the inline follow button. Set on a profile page, where every post
+   * is by the profile owner and the header already owns that control.
+   */
+  hideFollow?: boolean
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, hideFollow }: PostCardProps) {
   const { liked, likeCount, handleLike } = useOptimisticLike({
     postId: post.id,
     initialLiked: post.is_liked,
@@ -43,7 +48,7 @@ export function PostCard({ post }: PostCardProps) {
       <PostHeader
         author={post.author}
         createdAt={post.created_at}
-        showFollow={showFollow}
+        showFollow={showFollow && !hideFollow}
         isFollowPending={isFollowPending}
         onFollow={handleFollow}
       />

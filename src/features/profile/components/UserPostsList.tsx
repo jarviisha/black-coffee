@@ -44,7 +44,7 @@ export function UserPostsList({ userID }: UserPostsListProps) {
   return (
     <div>
       {items.map((post) => (
-        <PostCard key={post.id} post={post} />
+        <PostCard key={post.id} post={post} hideFollow />
       ))}
 
       {/* Sentinel for infinite scroll */}
