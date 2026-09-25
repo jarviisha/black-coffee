@@ -26,7 +26,6 @@ dist-ssr
 #AI Agents
 .agents/
 .claude/
-.mex/
 CLAUDE-*.md
 CLAUDE.md
 skills-lock.json
