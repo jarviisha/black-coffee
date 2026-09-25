@@ -48,6 +48,14 @@ export type HandlerFeedItemResponse = {
     */
     media?: HandlerMediaResponse[];
     /**
+     * @type integer | undefined
+    */
+    recommendation_rank?: number;
+    /**
+     * @type number | undefined
+    */
+    recommendation_score?: number;
+    /**
      * @type number | undefined
     */
     score?: number;

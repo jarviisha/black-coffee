@@ -8,7 +8,7 @@ import type { HandlerFeedResponse } from "./handler/FeedResponse.ts";
 
 export type GetFeedQueryParams = {
     /**
-     * @description Pagination cursor from previous response
+     * @description Opaque no-version pagination cursor from previous response
      * @type string | undefined
     */
     cursor?: string;

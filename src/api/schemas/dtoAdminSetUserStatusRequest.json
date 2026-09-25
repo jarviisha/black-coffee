@@ -1,0 +1,1 @@
+{"properties":{"is_active":{"example":false,"type":"boolean"}},"type":"object","x-readme-ref-name":"dto.AdminSetUserStatusRequest"}

@@ -1,0 +1,1 @@
+{"properties":{"data":{"items":{"properties":{"description":{"example":"Reserved for content moderation","type":"string"},"name":{"example":"moderator","type":"string"}},"type":"object","x-readme-ref-name":"dto.RoleResponse"},"type":"array"}},"type":"object","x-readme-ref-name":"dto.ListRolesResponse"}

@@ -13,7 +13,7 @@ function getGetUserUrl(userKey: GetUserPathParams["userKey"]) {
 }
 
 /**
- * @description Retrieve a user's information by UUID or username (with ?by=username)
+ * @description Retrieve the authenticated user's account information by UUID or username (with ?by=username)
  * @summary Get user by ID or username
  * {@link /users/:userKey}
  */

@@ -4,7 +4,7 @@
 */
 
 import fetch from "@kubb/plugin-client/clients/axios";
-import type { StreamNotificationsQueryResponse, StreamNotificationsQueryParams, StreamNotifications401, StreamNotifications501 } from "../models/StreamNotifications.ts";
+import type { StreamNotificationsQueryResponse, StreamNotifications401, StreamNotifications501 } from "../models/StreamNotifications.ts";
 import type { Client, RequestConfig, ResponseErrorConfig } from "@kubb/plugin-client/clients/axios";
 
 function getStreamNotificationsUrl() {
@@ -13,15 +13,15 @@ function getStreamNotificationsUrl() {
 }
 
 /**
- * @description Open a Server-Sent Events stream for real-time notifications. Pass JWT via Authorization header or ?token= query parameter.
+ * @description Open a Server-Sent Events stream for real-time notifications. Pass JWT via the Authorization header.
  * @summary Stream notifications (SSE)
  * {@link /notifications/stream}
  */
-export async function streamNotifications(params?: StreamNotificationsQueryParams, config: Partial<RequestConfig> & { client?: Client } = {}) {
+export async function streamNotifications(config: Partial<RequestConfig> & { client?: Client } = {}) {
   const { client: request = fetch, ...requestConfig } = config
 
 
 
-  const res = await request<StreamNotificationsQueryResponse, ResponseErrorConfig<StreamNotifications401 | StreamNotifications501>, unknown>({ method : "GET", url : getStreamNotificationsUrl().url.toString(), params, ... requestConfig })
+  const res = await request<StreamNotificationsQueryResponse, ResponseErrorConfig<StreamNotifications401 | StreamNotifications501>, unknown>({ method : "GET", url : getStreamNotificationsUrl().url.toString(), ... requestConfig })
   return res.data
 }

@@ -1,0 +1,1 @@
+{"properties":{"active_users":{"example":980,"type":"integer"},"inactive_users":{"example":44,"type":"integer"},"total_posts":{"example":5200,"type":"integer"},"total_roles":{"example":3,"type":"integer"},"total_users":{"example":1024,"type":"integer"}},"type":"object","x-readme-ref-name":"dto.AdminStatsResponse"}

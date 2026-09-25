@@ -3,35 +3,35 @@
 * Do not edit manually.
 */
 
-import type { StreamNotificationsQueryResponse, StreamNotificationsQueryParams, StreamNotifications401, StreamNotifications501 } from "../models/StreamNotifications.ts";
+import type { StreamNotificationsQueryResponse, StreamNotifications401, StreamNotifications501 } from "../models/StreamNotifications.ts";
 import type { Client, RequestConfig, ResponseErrorConfig } from "@kubb/plugin-client/clients/axios";
 import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from "@tanstack/react-query";
 import { streamNotifications } from "../clients/streamNotifications.ts";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 
-export const streamNotificationsQueryKey = (params?: StreamNotificationsQueryParams) => [{ url: '/notifications/stream' }, ...(params ? [params] : [])] as const
+export const streamNotificationsQueryKey = () => [{ url: '/notifications/stream' }] as const
 
 export type StreamNotificationsQueryKey = ReturnType<typeof streamNotificationsQueryKey>
 
-export function streamNotificationsQueryOptions(params?: StreamNotificationsQueryParams, config: Partial<RequestConfig> & { client?: Client } = {}) {
+export function streamNotificationsQueryOptions(config: Partial<RequestConfig> & { client?: Client } = {}) {
 
-        const queryKey = streamNotificationsQueryKey(params)
+        const queryKey = streamNotificationsQueryKey()
         return queryOptions<StreamNotificationsQueryResponse, ResponseErrorConfig<StreamNotifications401 | StreamNotifications501>, StreamNotificationsQueryResponse, typeof queryKey>({
          
          queryKey,
          queryFn: async ({ signal }) => {
-            return streamNotifications(params, { ...config, signal: config.signal ?? signal })
+            return streamNotifications({ ...config, signal: config.signal ?? signal })
          },
         })
 
 }
 
 /**
- * @description Open a Server-Sent Events stream for real-time notifications. Pass JWT via Authorization header or ?token= query parameter.
+ * @description Open a Server-Sent Events stream for real-time notifications. Pass JWT via the Authorization header.
  * @summary Stream notifications (SSE)
  * {@link /notifications/stream}
  */
-export function useStreamNotifications<TData = StreamNotificationsQueryResponse, TQueryData = StreamNotificationsQueryResponse, TQueryKey extends QueryKey = StreamNotificationsQueryKey>(params?: StreamNotificationsQueryParams, options: 
+export function useStreamNotifications<TData = StreamNotificationsQueryResponse, TQueryData = StreamNotificationsQueryResponse, TQueryKey extends QueryKey = StreamNotificationsQueryKey>(options: 
 {
   query?: Partial<QueryObserverOptions<StreamNotificationsQueryResponse, ResponseErrorConfig<StreamNotifications401 | StreamNotifications501>, TData, TQueryData, TQueryKey>> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: Client }
@@ -40,11 +40,11 @@ export function useStreamNotifications<TData = StreamNotificationsQueryResponse,
 
          const { query: queryConfig = {}, client: config = {} } = options ?? {}
          const { client: queryClient, ...resolvedOptions } = queryConfig
-         const queryKey = resolvedOptions?.queryKey ?? streamNotificationsQueryKey(params)
+         const queryKey = resolvedOptions?.queryKey ?? streamNotificationsQueryKey()
          
 
          const query = useQuery({
-          ...streamNotificationsQueryOptions(params, config),
+          ...streamNotificationsQueryOptions(config),
           ...resolvedOptions,
           queryKey,
          } as unknown as QueryObserverOptions, queryClient) as UseQueryResult<TData, ResponseErrorConfig<StreamNotifications401 | StreamNotifications501>> & { queryKey: TQueryKey }

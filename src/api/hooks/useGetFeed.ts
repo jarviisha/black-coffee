@@ -27,7 +27,7 @@ export function getFeedQueryOptions(params?: GetFeedQueryParams, config: Partial
 }
 
 /**
- * @description Get a scored, paginated feed of posts mixed from followed users and trending posts
+ * @description Get a scored, cursor-paginated feed from the prepared timeline, with timeline/following/recommendation/trending/discover positions encoded in a no-version opaque cursor. Versioned, nested timeline, and session-backed feed cursors are rejected.
  * @summary Get feed
  * {@link /feed}
  */

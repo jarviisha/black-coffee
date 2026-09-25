@@ -5,14 +5,6 @@
 
 import type { ErrorsErrorResponse } from "./errors/ErrorResponse.ts";
 
-export type StreamNotificationsQueryParams = {
-    /**
-     * @description JWT access token (alternative to Authorization header)
-     * @type string | undefined
-    */
-    token?: string;
-};
-
 /**
  * @description SSE stream
 */
@@ -32,6 +24,5 @@ export type StreamNotificationsQueryResponse = StreamNotifications200;
 
 export type StreamNotificationsQuery = {
     Response: StreamNotifications200;
-    QueryParams: StreamNotificationsQueryParams;
     Errors: StreamNotifications401 | StreamNotifications501;
 };
