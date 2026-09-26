@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { FeedList } from "./components/FeedList"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 import { useComposeStore } from "@/store/composeStore"
 
 export function HomePage() {

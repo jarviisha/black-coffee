@@ -29,6 +29,15 @@ export function getApiErrorMessage(error: unknown): string | null {
   return typeof message === "string" && message.length > 0 ? message : null
 }
 
+/**
+ * User-facing message for a failed API call. The caller supplies the wording to
+ * show when the response carries no message of its own (network error, timeout,
+ * empty 5xx body) — usually `t("common.error")`.
+ */
+export function apiErrorMessage(error: unknown, fallback: string): string {
+  return getApiErrorMessage(error) ?? fallback
+}
+
 /** HTTP status of an API error, or null if it never reached the server. */
 export function getApiErrorStatus(error: unknown): number | null {
   if (!isAxiosError(error)) return null

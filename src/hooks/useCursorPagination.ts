@@ -14,12 +14,6 @@ type UseCursorPaginationOptions<T> = {
    * to the query hook before this hook is called (no circular dependency).
    */
   page?: PageResult<T> | null
-  /**
-   * When this value changes, the accumulated list is cleared and the current
-   * page is re-processed from scratch. Useful for live-update scenarios where
-   * new items arrive at the top (e.g. SSE notifications).
-   */
-  resetKey?: unknown
 }
 
 export function useCursorPagination<T extends { id?: string }>({
@@ -27,7 +21,6 @@ export function useCursorPagination<T extends { id?: string }>({
   onNextPage,
   isFetching,
   page,
-  resetKey,
 }: UseCursorPaginationOptions<T>) {
   const [items, setItems] = useState<T[]>([])
   const fetchedKeys = useRef(new Set<string>())
@@ -73,22 +66,12 @@ export function useCursorPagination<T extends { id?: string }>({
     [cursor],
   )
 
-  // When resetKey changes, clear accumulated state so the current page is re-processed.
-  useEffect(() => {
-    if (resetKey === undefined) return
-    fetchedKeys.current.clear()
-    seenIds.current.clear()
-    nextCursorRef.current = undefined
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setItems([])
-  }, [resetKey])
-
   // Syncing accumulated items with incoming page data from React Query (external system).
   // setState inside effect is intentional: data arrives asynchronously from the server
   // and must be accumulated across multiple pages — this cannot be derived during render.
   useEffect(() => {
     if (page?.data) appendPage(page.data, page.next_cursor)
-  }, [page, appendPage, resetKey])
+  }, [page, appendPage])
 
   useEffect(() => {
     if (!sentinel) return

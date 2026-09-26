@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
-import { cn, getApiErrorMessage } from "@/lib/utils"
+import { cn, apiErrorMessage } from "@/lib/utils"
 import { Button, ButtonIcon } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
 import { useAuthStore } from "@/store/authStore"
@@ -38,7 +38,7 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const theme = useThemeStore((s) => s.theme)
 
-  const schema = useMemo(() => createPostSchema(t, MAX_POST_CHARS), [t])
+  const schema = useMemo(() => createPostSchema(t), [t])
   const {
     register,
     handleSubmit,
@@ -171,7 +171,7 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
           markPosted()
           onClose()
         },
-        onError: (err) => setSubmitError(getApiErrorMessage(err) ?? t("compose.error")),
+        onError: (err) => setSubmitError(apiErrorMessage(err, t("compose.error"))),
       },
     )
   }

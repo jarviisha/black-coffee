@@ -3,7 +3,7 @@ import { toast } from "sonner"
 import { useTranslation } from "react-i18next"
 import { useToggleLike } from "@/api/hooks/useToggleLike"
 import { useAuthStore } from "@/store/authStore"
-import { getApiErrorMessage } from "@/lib/utils"
+import { apiErrorMessage } from "@/lib/utils"
 
 interface UseOptimisticLikeOptions {
   postId?: string
@@ -39,7 +39,7 @@ export function useOptimisticLike({
           setLiked(!next)
           setLikeCount((c) => c + (next ? -1 : 1))
           // Without this the heart just flips back on its own, which reads as a bug.
-          toast.error(getApiErrorMessage(err) ?? t("common.error"))
+          toast.error(apiErrorMessage(err, t("common.error")))
         },
       },
     )

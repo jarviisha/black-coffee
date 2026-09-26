@@ -13,7 +13,7 @@ import { UserPostsList } from "./components/UserPostsList"
 import { Button } from "@/components/ui/Button"
 import { Spinner } from "@/components/ui/Spinner"
 import { PageHeader } from "@/components/ui/PageHeader"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 
 type Tab = "posts" | "media"
 

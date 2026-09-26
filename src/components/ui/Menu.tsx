@@ -1,6 +1,7 @@
 import { createContext, use, useState, useRef, useEffect, type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { Button, type ButtonProps } from "@/components/ui/Button"
+import { createMenuKeyNav } from "@/lib/menuKeyNav"
 
 interface MenuContextValue {
   openSubmenu: string | null
@@ -42,10 +43,16 @@ function MenuRoot({ children }: MenuRootProps) {
   return <MenuContext value={{ openSubmenu, openSub, closeSub }}>{children}</MenuContext>
 }
 
-function MenuContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function MenuContent({
+  children,
+  className,
+  onKeyDown,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       role="menu"
+      onKeyDown={createMenuKeyNav(onKeyDown)}
       className={cn("bg-bg border-border z-50 flex flex-col rounded border shadow-lg", className)}
       {...props}
     >
@@ -135,9 +142,15 @@ function MenuSubTrigger({ children, className, ...props }: MenuSubTriggerProps) 
   )
 }
 
-function MenuSubContent({ children, className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+function MenuSubContent({
+  children,
+  className,
+  onKeyDown,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
   const ctx = use(MenuSubContext)
   const menuCtx = useMenuContext()
+  const handleKeyDown = createMenuKeyNav(onKeyDown)
   if (!ctx) throw new Error("Menu.SubContent must be used inside Menu.Sub")
 
   if (!ctx.isOpen) return null
@@ -145,6 +158,7 @@ function MenuSubContent({ children, className, ...props }: React.HTMLAttributes<
   return (
     <div
       role="menu"
+      onKeyDown={handleKeyDown}
       onMouseEnter={() => menuCtx.openSub(ctx.value)}
       onMouseLeave={menuCtx.closeSub}
       className={cn(

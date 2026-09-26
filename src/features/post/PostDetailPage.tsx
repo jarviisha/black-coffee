@@ -6,7 +6,7 @@ import { CommentInput } from "./components/CommentInput"
 import { CommentList } from "./components/CommentList"
 import { Spinner } from "@/components/ui/Spinner"
 import { PageHeader } from "@/components/ui/PageHeader"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 
 export function PostDetailPage() {
   const { t } = useTranslation()

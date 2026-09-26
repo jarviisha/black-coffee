@@ -3,7 +3,7 @@ import { useSearchParams } from "react-router"
 import { useTranslation } from "react-i18next"
 import { Spinner } from "@/components/ui/Spinner"
 import { useVerifyEmail } from "@/api/hooks/useVerifyEmail"
-import { getApiErrorMessage } from "@/lib/utils"
+import { apiErrorMessage } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 
@@ -27,13 +27,15 @@ export function VerifyEmailForm() {
         <AuthHeader
           title={t("auth.verifyEmail.failedTitle")}
           subtitle={
-            (error ? getApiErrorMessage(error) : null) ?? t("auth.verifyEmail.failedSubtitle")
+            error
+              ? apiErrorMessage(error, t("auth.verifyEmail.failedSubtitle"))
+              : t("auth.verifyEmail.failedSubtitle")
           }
         />
         <AuthSwitchLink
-          prompt={t("auth.forgotPassword.rememberedPrompt")}
+          prompt={t("auth.rememberedPrompt")}
           to="/login"
-          label={t("auth.forgotPassword.backToLogin")}
+          label={t("auth.backToLogin")}
         />
       </div>
     )
@@ -55,9 +57,9 @@ export function VerifyEmailForm() {
         subtitle={t("auth.verifyEmail.successSubtitle")}
       />
       <AuthSwitchLink
-        prompt={t("auth.forgotPassword.rememberedPrompt")}
+        prompt={t("auth.rememberedPrompt")}
         to="/login"
-        label={t("auth.forgotPassword.backToLogin")}
+        label={t("auth.backToLogin")}
       />
     </div>
   )

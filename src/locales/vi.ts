@@ -73,8 +73,6 @@ const vi: Translations = {
       submitting: "Đang gửi…",
       sentTitle: "Kiểm tra hộp thư",
       sentSubtitle: "Nếu có tài khoản khớp với {{email}}, liên kết đặt lại đang trên đường tới.",
-      rememberedPrompt: "Đã nhớ ra mật khẩu?",
-      backToLogin: "Quay lại đăng nhập",
     },
     resetPassword: {
       title: "Chọn mật khẩu mới",
@@ -109,6 +107,8 @@ const vi: Translations = {
     errors: {
       invalidCredentials: "Thông tin đăng nhập không đúng. Vui lòng thử lại.",
     },
+    rememberedPrompt: "Đã nhớ ra mật khẩu?",
+    backToLogin: "Quay lại đăng nhập",
     showPassword: "Hiện mật khẩu",
     hidePassword: "Ẩn mật khẩu",
     validation: {
@@ -116,7 +116,7 @@ const vi: Translations = {
       passwordMin: "Mật khẩu tối thiểu 8 ký tự",
       usernameMin: "Tên đăng nhập tối thiểu 3 ký tự",
       usernameMax: "Tên đăng nhập tối đa 30 ký tự",
-      displayNameMax: "Tên hiển thị tối đa 50 ký tự",
+      displayNameMax: "Tên hiển thị tối đa {{max}} ký tự",
       emailInvalid: "Email không hợp lệ",
       passwordMismatch: "Mật khẩu không khớp",
     },
@@ -251,6 +251,12 @@ const vi: Translations = {
       website: "Website",
       websitePlaceholder: "https://website.com",
       save: "Lưu thay đổi",
+      validation: {
+        displayNameMax: "Tên hiển thị tối đa 50 ký tự",
+        bioMax: "Tiểu sử tối đa {{max}} ký tự",
+        locationMax: "Vị trí tối đa {{max}} ký tự",
+        websiteInvalid: "Nhập một URL hợp lệ",
+      },
       discardChanges: "Bạn có thay đổi chưa lưu. Rời trang mà không lưu?",
     },
   },

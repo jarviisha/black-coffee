@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button"
 import { FormAlert } from "@/components/ui/FormAlert"
 import { useResetPassword } from "@/api/hooks/useResetPassword"
 import { createResetPasswordSchema, type ResetPasswordInput } from "../schemas"
-import { getApiErrorMessage } from "@/lib/utils"
+import { apiErrorMessage } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 import { PasswordField } from "./PasswordField"
@@ -29,7 +29,7 @@ export function ResetPasswordForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = error ? (getApiErrorMessage(error) ?? t("common.error")) : null
+  const serverError = error ? apiErrorMessage(error, t("common.error")) : null
 
   const onSubmit = (data: ResetPasswordInput) => {
     if (!token) return
@@ -62,9 +62,9 @@ export function ResetPasswordForm() {
           subtitle={t("auth.resetPassword.doneSubtitle")}
         />
         <AuthSwitchLink
-          prompt={t("auth.forgotPassword.rememberedPrompt")}
+          prompt={t("auth.rememberedPrompt")}
           to="/login"
-          label={t("auth.forgotPassword.backToLogin")}
+          label={t("auth.backToLogin")}
         />
       </div>
     )
@@ -117,9 +117,9 @@ export function ResetPasswordForm() {
       </Button>
 
       <AuthSwitchLink
-        prompt={t("auth.forgotPassword.rememberedPrompt")}
+        prompt={t("auth.rememberedPrompt")}
         to="/login"
-        label={t("auth.forgotPassword.backToLogin")}
+        label={t("auth.backToLogin")}
       />
     </form>
   )

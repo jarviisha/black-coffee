@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { AxiosError, AxiosHeaders } from "axios"
-import { getApiErrorMessage, getApiErrorStatus } from "./utils"
+import { apiErrorMessage, getApiErrorMessage, getApiErrorStatus } from "./utils"
 
 function axiosErrorWith(data: unknown) {
   const headers = new AxiosHeaders()
@@ -56,5 +56,18 @@ describe("getApiErrorStatus", () => {
   it("returns null when the request never got a response", () => {
     expect(getApiErrorStatus(new AxiosError("Network Error", "ERR_NETWORK"))).toBeNull()
     expect(getApiErrorStatus(new Error("boom"))).toBeNull()
+  })
+})
+
+describe("apiErrorMessage", () => {
+  it("prefers the server's message", () => {
+    const err = axiosErrorWith({ error: { message: "you cannot like your own post" } })
+    expect(apiErrorMessage(err, "fallback")).toBe("you cannot like your own post")
+  })
+
+  it("uses the caller's wording when there is no message to show", () => {
+    expect(apiErrorMessage(new AxiosError("Network Error", "ERR_NETWORK"), "fallback")).toBe(
+      "fallback",
+    )
   })
 })

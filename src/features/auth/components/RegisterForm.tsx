@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button"
 import { FormAlert } from "@/components/ui/FormAlert"
 import { useAuth } from "../hooks/useAuth"
 import { createRegisterSchema, type RegisterInput } from "../schemas"
-import { cn, getApiErrorMessage } from "@/lib/utils"
+import { cn, apiErrorMessage } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 import { PasswordField } from "./PasswordField"
@@ -80,7 +80,7 @@ export function RegisterForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = registerError ? (getApiErrorMessage(registerError) ?? t("common.error")) : null
+  const serverError = registerError ? apiErrorMessage(registerError, t("common.error")) : null
 
   const strengthLabels = [
     "",

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button"
 import { FormAlert } from "@/components/ui/FormAlert"
 import { useForgotPassword } from "@/api/hooks/useForgotPassword"
 import { createForgotPasswordSchema, type ForgotPasswordInput } from "../schemas"
-import { getApiErrorMessage } from "@/lib/utils"
+import { apiErrorMessage } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 
@@ -27,7 +27,7 @@ export function ForgotPasswordForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = error ? (getApiErrorMessage(error) ?? t("common.error")) : null
+  const serverError = error ? apiErrorMessage(error, t("common.error")) : null
 
   const onSubmit = (data: ForgotPasswordInput) => {
     mutate({ data })
@@ -43,9 +43,9 @@ export function ForgotPasswordForm() {
           subtitle={t("auth.forgotPassword.sentSubtitle", { email: getValues("email") })}
         />
         <AuthSwitchLink
-          prompt={t("auth.forgotPassword.rememberedPrompt")}
+          prompt={t("auth.rememberedPrompt")}
           to="/login"
-          label={t("auth.forgotPassword.backToLogin")}
+          label={t("auth.backToLogin")}
         />
       </div>
     )
@@ -89,9 +89,9 @@ export function ForgotPasswordForm() {
       </Button>
 
       <AuthSwitchLink
-        prompt={t("auth.forgotPassword.rememberedPrompt")}
+        prompt={t("auth.rememberedPrompt")}
         to="/login"
-        label={t("auth.forgotPassword.backToLogin")}
+        label={t("auth.backToLogin")}
       />
     </form>
   )

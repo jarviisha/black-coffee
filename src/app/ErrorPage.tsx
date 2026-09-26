@@ -2,7 +2,7 @@ import { Link, isRouteErrorResponse, useRouteError } from "react-router"
 import { useTranslation } from "react-i18next"
 import { Icon } from "@/components/ui/Icon"
 import { brand } from "@/config/brand"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 
 /**
  * Serves both roles: the catch-all `*` route (no error to read) and the

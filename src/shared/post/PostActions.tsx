@@ -2,7 +2,7 @@ import { Link } from "react-router"
 import { useTranslation } from "react-i18next"
 import { Icon } from "@/components/ui/Icon"
 import { ButtonIcon } from "@/components/ui/Button"
-import { formatDateTime, formatCount } from "@/lib/utils"
+import { cn, formatDateTime, formatCount } from "@/lib/utils"
 
 interface PostActionsProps {
   postId?: string
@@ -34,7 +34,11 @@ export function PostActions({
       <div className="flex items-center gap-5">
         <div
           aria-pressed={canLike ? liked : undefined}
-          className={`flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none ${liked ? "text-like" : ""} ${canLike ? "hover:text-like" : ""}`}
+          className={cn(
+            "flex items-center gap-1.5 text-xs font-bold transition-colors motion-reduce:transition-none",
+            liked && "text-like",
+            canLike && "hover:text-like",
+          )}
         >
           {canLike ? (
             <ButtonIcon

@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next"
 import { DiscoverList } from "./components/DiscoverList"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 
 export function DiscoverPage() {
   const { t } = useTranslation()

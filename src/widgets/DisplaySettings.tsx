@@ -5,6 +5,7 @@ import { useDropdown } from "@/hooks/useDropdown"
 import { Button } from "@/components/ui/Button"
 import { Icon, type IconName } from "@/components/ui/Icon"
 import { cn } from "@/lib/utils"
+import { createMenuKeyNav } from "@/lib/menuKeyNav"
 
 const THEME_OPTIONS: {
   value: Theme
@@ -44,11 +45,12 @@ export function LanguageDropdown() {
       </Button>
 
       {open && (
-        <div ref={panelRef} className={dropdownClass}>
+        <div ref={panelRef} role="menu" onKeyDown={createMenuKeyNav()} className={dropdownClass}>
           {(Object.entries(LANGUAGES) as [Language, (typeof LANGUAGES)[Language]][]).map(
             ([code, { label, nativeLabel }]) => (
               <Button
                 key={code}
+                role="menuitem"
                 variant="ghost"
                 color="muted"
                 onClick={() => {
@@ -103,10 +105,11 @@ export function ThemeDropdown() {
       </Button>
 
       {open && (
-        <div ref={panelRef} className={dropdownClass}>
+        <div ref={panelRef} role="menu" onKeyDown={createMenuKeyNav()} className={dropdownClass}>
           {THEME_OPTIONS.map(({ value, labelKey, icon }) => (
             <Button
               key={value}
+              role="menuitem"
               variant="ghost"
               color="muted"
               onClick={() => {

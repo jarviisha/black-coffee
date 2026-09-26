@@ -58,6 +58,9 @@ export function useAuth() {
       ),
     logout: () => {
       clearAuth()
+      // cancelQueries aborts what is still in flight; removeQueries only drops
+      // the cache, leaving pending requests to land (and 401) after logout.
+      void queryClient.cancelQueries()
       queryClient.removeQueries()
       logoutMutation.mutate({ data: {} })
     },

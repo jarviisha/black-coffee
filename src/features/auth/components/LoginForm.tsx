@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button"
 import { FormAlert } from "@/components/ui/FormAlert"
 import { useAuth } from "../hooks/useAuth"
 import { createLoginSchema, type LoginInput } from "../schemas"
-import { getApiErrorMessage, getApiErrorStatus } from "@/lib/utils"
+import { apiErrorMessage, getApiErrorStatus } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 import { PasswordField } from "./PasswordField"
@@ -35,7 +35,7 @@ export function LoginForm() {
     ? null
     : getApiErrorStatus(loginError) === 401
       ? t("auth.errors.invalidCredentials")
-      : (getApiErrorMessage(loginError) ?? t("common.error"))
+      : apiErrorMessage(loginError, t("common.error"))
 
   const onSubmit = (data: LoginInput) => {
     login(data, { onSuccess: () => void navigate("/") })

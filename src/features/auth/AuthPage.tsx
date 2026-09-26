@@ -6,44 +6,31 @@ import { RegisterForm } from "./components/RegisterForm"
 import { ForgotPasswordForm } from "./components/ForgotPasswordForm"
 import { ResetPasswordForm } from "./components/ResetPasswordForm"
 import { VerifyEmailForm } from "./components/VerifyEmailForm"
-import { PageTitle } from "@/components/PageTitle"
+import { PageTitle } from "@/components/ui/PageTitle"
 
-type AuthView = "login" | "register" | "forgotPassword" | "resetPassword" | "verifyEmail"
-
-const views: Record<AuthView, () => React.JSX.Element> = {
-  login: LoginForm,
-  register: RegisterForm,
-  forgotPassword: ForgotPasswordForm,
-  resetPassword: ResetPasswordForm,
-  verifyEmail: VerifyEmailForm,
-}
-
-function viewFor(pathname: string): AuthView {
-  if (pathname === "/register") return "register"
-  if (pathname === "/forgot-password") return "forgotPassword"
-  if (pathname === "/reset-password") return "resetPassword"
-  if (pathname === "/verify-email") return "verifyEmail"
-  return "login"
-}
-
-const titleKeys = {
-  login: "auth.login.title",
-  register: "auth.register.title",
-  forgotPassword: "auth.forgotPassword.title",
-  resetPassword: "auth.resetPassword.title",
-  verifyEmail: "auth.verifyEmail.title",
-} as const satisfies Record<AuthView, string>
+/**
+ * One entry per auth route: which form renders and what the tab is called.
+ * Every route in the router's guest group must appear here; "/login" is the
+ * fallback for anything else that reaches this page.
+ */
+const VIEWS = {
+  "/register": { Form: RegisterForm, titleKey: "auth.register.title" },
+  "/forgot-password": { Form: ForgotPasswordForm, titleKey: "auth.forgotPassword.title" },
+  "/reset-password": { Form: ResetPasswordForm, titleKey: "auth.resetPassword.title" },
+  "/verify-email": { Form: VerifyEmailForm, titleKey: "auth.verifyEmail.title" },
+  "/login": { Form: LoginForm, titleKey: "auth.login.title" },
+} as const
 
 export function AuthPage() {
   const { t } = useTranslation()
   const { pathname } = useLocation()
 
-  const view = viewFor(pathname)
-  const Form = views[view]
+  const key = pathname in VIEWS ? (pathname as keyof typeof VIEWS) : "/login"
+  const { Form, titleKey } = VIEWS[key]
 
   return (
-    <AuthLayout transitionKey={view}>
-      <PageTitle title={t(titleKeys[view])} />
+    <AuthLayout transitionKey={key}>
+      <PageTitle title={t(titleKey)} />
       <Form />
     </AuthLayout>
   )

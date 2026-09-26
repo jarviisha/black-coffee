@@ -71,8 +71,6 @@ const en = {
       submitting: "Sending…",
       sentTitle: "Check your inbox",
       sentSubtitle: "If an account matches {{email}}, a reset link is on its way.",
-      rememberedPrompt: "Remembered it?",
-      backToLogin: "Back to sign in",
     },
     resetPassword: {
       title: "Choose a new password",
@@ -107,6 +105,8 @@ const en = {
     errors: {
       invalidCredentials: "Invalid credentials. Please try again.",
     },
+    rememberedPrompt: "Remembered it?",
+    backToLogin: "Back to sign in",
     showPassword: "Show password",
     hidePassword: "Hide password",
     validation: {
@@ -114,7 +114,7 @@ const en = {
       passwordMin: "Password must be at least 8 characters",
       usernameMin: "Username must be at least 3 characters",
       usernameMax: "Username must be at most 30 characters",
-      displayNameMax: "Display name must be at most 50 characters",
+      displayNameMax: "Display name must be at most {{max}} characters",
       emailInvalid: "Invalid email address",
       passwordMismatch: "Passwords do not match",
     },
@@ -249,6 +249,12 @@ const en = {
       website: "Website",
       websitePlaceholder: "https://yoursite.com",
       save: "Save changes",
+      validation: {
+        displayNameMax: "Display name must be at most 50 characters",
+        bioMax: "Bio must be at most {{max}} characters",
+        locationMax: "Location must be at most {{max}} characters",
+        websiteInvalid: "Enter a valid URL",
+      },
       discardChanges: "You have unsaved changes. Leave without saving?",
     },
   },

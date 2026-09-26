@@ -1,6 +1,9 @@
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
 import { useNavigate, useBlocker } from "react-router"
 import { useTranslation } from "react-i18next"
+import { toast } from "sonner"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
@@ -11,7 +14,9 @@ import { useUploadAvatar } from "@/api/hooks/useUploadAvatar"
 import { useUploadCover } from "@/api/hooks/useUploadCover"
 import { useAuthStore } from "@/store/authStore"
 import { PageHeader } from "@/components/ui/PageHeader"
-import { PageTitle } from "@/components/PageTitle"
+import { apiErrorMessage } from "@/lib/utils"
+import { PageTitle } from "@/components/ui/PageTitle"
+import { createEditProfileSchema, type EditProfileInput } from "./schemas"
 
 export function EditProfilePage() {
   const { t } = useTranslation()
@@ -35,11 +40,21 @@ export function EditProfilePage() {
     })
   }
 
-  // Text fields
-  const [displayName, setDisplayName] = useState(user?.display_name ?? "")
-  const [bio, setBio] = useState(user?.bio ?? "")
-  const [location, setLocation] = useState(user?.location ?? "")
-  const [website, setWebsite] = useState(user?.website ?? "")
+  const schema = useMemo(() => createEditProfileSchema(t), [t])
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm<EditProfileInput>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      display_name: user?.display_name ?? "",
+      bio: user?.bio ?? "",
+      location: user?.location ?? "",
+      website: user?.website ?? "",
+    },
+  })
 
   // Local previews while upload is in-flight
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
@@ -50,17 +65,10 @@ export function EditProfilePage() {
 
   const { mutate: updateProfile, isPending: isProfilePending } = useUpdateMyProfile()
 
-  // Leaving with edited text fields used to discard them without a word.
-  const isDirty =
-    displayName !== (user?.display_name ?? "") ||
-    bio !== (user?.bio ?? "") ||
-    location !== (user?.location ?? "") ||
-    website !== (user?.website ?? "")
-
-  // Read through refs: the blocker callback runs at navigation time, after the
-  // save has already flipped these, so a closed-over value would be stale.
+  // Leaving with edited text fields used to discard them without a word. The
+  // blocker callback runs at navigation time, after a save has already reset
+  // the form, so it reads a ref rather than a closed-over render value.
   const isDirtyRef = useRef(isDirty)
-  const isSavingRef = useRef(false)
 
   useEffect(() => {
     isDirtyRef.current = isDirty
@@ -68,9 +76,7 @@ export function EditProfilePage() {
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
-      isDirtyRef.current &&
-      !isSavingRef.current &&
-      currentLocation.pathname !== nextLocation.pathname,
+      isDirtyRef.current && currentLocation.pathname !== nextLocation.pathname,
   )
 
   useEffect(() => {
@@ -81,7 +87,7 @@ export function EditProfilePage() {
 
   useEffect(() => {
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isDirtyRef.current && !isSavingRef.current) e.preventDefault()
+      if (isDirtyRef.current) e.preventDefault()
     }
     window.addEventListener("beforeunload", onBeforeUnload)
     return () => window.removeEventListener("beforeunload", onBeforeUnload)
@@ -125,27 +131,26 @@ export function EditProfilePage() {
 
   // --- Form submit (text fields only) ---
 
-  const handleSubmit = (e: React.SyntheticEvent) => {
-    e.preventDefault()
-    isSavingRef.current = true
+  const onSubmit = (values: EditProfileInput) => {
     updateProfile(
       {
         data: {
-          display_name: displayName || undefined,
-          bio: bio || undefined,
-          location: location || undefined,
-          website: website || undefined,
+          display_name: values.display_name || undefined,
+          bio: values.bio || undefined,
+          location: values.location || undefined,
+          website: values.website || undefined,
         },
       },
       {
         onSuccess: (updated) => {
           setUser(updated)
           invalidateProfileQueries()
+          // Clears isDirty before navigating, so the blocker stays out of the way.
+          reset(values)
+          isDirtyRef.current = false
           void navigate(-1)
         },
-        onError: () => {
-          isSavingRef.current = false
-        },
+        onError: (err) => toast.error(apiErrorMessage(err, t("common.error"))),
       },
     )
   }
@@ -245,40 +250,44 @@ export function EditProfilePage() {
           <div className="border-border border-b px-4">
             <h1 className="text-lg font-semibold">{t("profile.edit.personalInformation")}</h1>
           </div>
-          <form onSubmit={handleSubmit} className="mt-2 flex flex-col gap-5">
+          <form
+            onSubmit={(e) => void handleSubmit(onSubmit)(e)}
+            className="mt-2 flex flex-col gap-5"
+            noValidate
+          >
             <Input
+              {...register("display_name")}
               id="edit-display-name"
               label={t("profile.edit.displayName")}
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
               placeholder={t("profile.edit.displayNamePlaceholder")}
+              error={errors.display_name?.message}
             />
 
             <Textarea
+              {...register("bio")}
               id="edit-bio"
               label={t("profile.edit.bio")}
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
               placeholder={t("profile.edit.bioPlaceholder")}
               rows={4}
               className="resize-none"
+              error={errors.bio?.message}
             />
 
             <Input
+              {...register("location")}
               id="edit-location"
               label={t("profile.edit.location")}
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
               placeholder={t("profile.edit.locationPlaceholder")}
+              error={errors.location?.message}
             />
 
             <Input
+              {...register("website")}
               id="edit-website"
               label={t("profile.edit.website")}
               type="url"
-              value={website}
-              onChange={(e) => setWebsite(e.target.value)}
               placeholder={t("profile.edit.websitePlaceholder")}
+              error={errors.website?.message}
             />
 
             <div className="mt-2 flex gap-3">

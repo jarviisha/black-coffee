@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
-import { cn, timeAgo, getApiErrorMessage } from "@/lib/utils"
+import { cn, timeAgo, apiErrorMessage } from "@/lib/utils"
 import { Avatar } from "@/components/ui/Avatar"
 import { LinkedUserInfo } from "@/components/ui/UserInfo"
 import { Icon } from "@/components/ui/Icon"
@@ -69,7 +69,7 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
         onError: (err) => {
           setIsLiked(!next)
           setLikeCount((c) => c + (next ? -1 : 1))
-          toast.error(getApiErrorMessage(err) ?? t("common.error"))
+          toast.error(apiErrorMessage(err, t("common.error")))
         },
       },
     )

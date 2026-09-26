@@ -3,6 +3,7 @@ import type { InternalAxiosRequestConfig } from "axios"
 import axios from "axios"
 import { useAuthStore } from "@/store/authStore"
 import { router } from "@/app/router"
+import { shouldAttemptRefresh } from "./shouldAttemptRefresh"
 
 type RetriableConfig = InternalAxiosRequestConfig & { _retry?: boolean }
 
@@ -71,15 +72,18 @@ axiosInstance.interceptors.response.use(
     }
 
     const original = rawError.config as RetriableConfig | undefined
+    const { accessToken, setTokens, logout } = useAuthStore.getState()
 
-    // Don't retry if: not a 401, already retried, or the failing request is an auth endpoint
-    // (login/register 401 = wrong credentials, not an expired token; refresh would deadlock)
-    const isAuthRequest = original?.url?.startsWith("/auth/")
-    if (rawError.response?.status !== 401 || original?._retry || isAuthRequest) {
+    if (
+      !shouldAttemptRefresh({
+        status: rawError.response?.status,
+        url: original?.url,
+        alreadyRetried: original?._retry ?? false,
+        hasSession: accessToken !== null,
+      })
+    ) {
       return Promise.reject(rawError)
     }
-
-    const { setTokens, logout } = useAuthStore.getState()
 
     // Queue the request if already refreshing
     if (isRefreshing) {
@@ -103,6 +107,15 @@ axiosInstance.interceptors.response.use(
       // refresh_token is sent automatically via HttpOnly cookie
       const res = await axiosInstance.post<TokenResponse>("/auth/refresh")
       const { access_token } = res.data
+
+      // The user can log out while this request is in flight. Applying the new
+      // token then would hand the session straight back, and processQueue would
+      // replay the waiting requests authenticated.
+      if (useAuthStore.getState().accessToken === null) {
+        const err = new Error("Session ended during refresh")
+        rejectQueue(err)
+        return Promise.reject(err)
+      }
 
       setTokens(access_token)
       processQueue(access_token)
