@@ -20,6 +20,7 @@ export function SearchBar() {
     userCount,
     showRecent,
     showSearch,
+    showMinLength,
     showDropdown,
     handleFocus,
     handleClear,
@@ -46,6 +47,7 @@ export function SearchBar() {
         <SearchDropdown
           showRecent={showRecent}
           showSearch={showSearch}
+          showMinLength={showMinLength}
           isLoading={isLoading}
           hasAny={hasAny}
           hasUsers={hasUsers}

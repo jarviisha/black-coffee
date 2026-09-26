@@ -8,6 +8,7 @@ import type { SearchQueryResponse } from "@/api/models/Search"
 interface SearchDropdownProps {
   showRecent: boolean
   showSearch: boolean
+  showMinLength: boolean
   isLoading: boolean
   hasAny: boolean
   hasUsers: boolean
@@ -26,6 +27,7 @@ interface SearchDropdownProps {
 export function SearchDropdown({
   showRecent,
   showSearch,
+  showMinLength,
   isLoading,
   hasAny,
   hasUsers,
@@ -44,6 +46,10 @@ export function SearchDropdown({
 
   return (
     <div className="bg-bg border-border-hi absolute top-full right-0 left-0 z-50 mt-1.5 overflow-hidden rounded border shadow-md">
+      {showMinLength && (
+        <p className="text-text-muted px-3 py-2.5 text-sm">{t("discover.minLength")}</p>
+      )}
+
       {showRecent && (
         <>
           <div className="flex items-center justify-between px-3 pt-2.5 pb-1">

@@ -25,7 +25,9 @@ function AuthInitializer() {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10_000)
 
-    // Skip refresh on guest pages — no session to restore
+    // Skip refresh on the two pages a signed-out user lands on by default.
+    // The emailed landing pages are deliberately absent: they are reachable
+    // while signed in, and skipping the refresh there would log that tab out.
     const guestPaths = ["/login", "/register"]
     if (guestPaths.includes(window.location.pathname)) {
       setInitialized()

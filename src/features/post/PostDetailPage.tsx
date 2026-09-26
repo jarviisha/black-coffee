@@ -6,6 +6,7 @@ import { CommentInput } from "./components/CommentInput"
 import { CommentList } from "./components/CommentList"
 import { Spinner } from "@/components/ui/Spinner"
 import { PageHeader } from "@/components/ui/PageHeader"
+import { PageTitle } from "@/components/ui/PageTitle"
 
 export function PostDetailPage() {
   const { t } = useTranslation()
@@ -27,6 +28,13 @@ export function PostDetailPage() {
 
   return (
     <div>
+      <PageTitle
+        title={
+          post.author?.display_name
+            ? `${t("common.post")} · ${post.author.display_name}`
+            : t("common.post")
+        }
+      />
       <PageHeader title={t("common.post")} back />
       <div className="relative mx-auto max-w-xl">
         <div className="border-border space-y-4 pb-12">

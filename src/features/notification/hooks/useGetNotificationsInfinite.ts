@@ -1,7 +1,17 @@
-import { useInfiniteQuery, type InfiniteData, type UseInfiniteQueryOptions } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  type InfiniteData,
+  type UseInfiniteQueryOptions,
+} from "@tanstack/react-query"
 import { getNotificationsQueryKey } from "@/api/hooks/useGetNotifications"
 import { getNotifications } from "@/api/clients/getNotifications"
-import type { GetNotificationsQueryResponse, GetNotificationsQueryParams, GetNotifications400, GetNotifications401, GetNotifications500 } from "@/api/models/GetNotifications"
+import type {
+  GetNotificationsQueryResponse,
+  GetNotificationsQueryParams,
+  GetNotifications400,
+  GetNotifications401,
+  GetNotifications500,
+} from "@/api/models/GetNotifications"
 import type { ResponseErrorConfig } from "@kubb/plugin-client/clients/axios"
 
 export function useGetNotificationsInfinite(
@@ -16,7 +26,7 @@ export function useGetNotificationsInfinite(
       string | undefined
     >,
     "queryKey" | "queryFn" | "initialPageParam" | "getNextPageParam"
-  >
+  >,
 ) {
   const queryKey = getNotificationsQueryKey(params)
 

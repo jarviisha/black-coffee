@@ -47,6 +47,7 @@ export function SearchInput({
         }}
         onFocus={onFocus}
         onKeyDown={onKeyDown}
+        aria-label={t("discover.searchPlaceholder")}
         placeholder={t("discover.searchPlaceholder")}
         autoComplete="off"
         spellCheck={false}

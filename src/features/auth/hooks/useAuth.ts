@@ -28,8 +28,17 @@ export function useAuth() {
         },
       ),
     register: (input: RegisterInput, opts?: { onSuccess?: () => void }) =>
+      // The API rejects unknown fields outright, so the confirmation copy of the
+      // password stays in the form and never goes over the wire.
       registerMutation.mutate(
-        { data: input },
+        {
+          data: {
+            display_name: input.display_name,
+            username: input.username,
+            email: input.email,
+            password: input.password,
+          },
+        },
         {
           onSuccess: (data) => {
             void (async () => {
@@ -49,6 +58,9 @@ export function useAuth() {
       ),
     logout: () => {
       clearAuth()
+      // cancelQueries aborts what is still in flight; removeQueries only drops
+      // the cache, leaving pending requests to land (and 401) after logout.
+      void queryClient.cancelQueries()
       queryClient.removeQueries()
       logoutMutation.mutate({ data: {} })
     },

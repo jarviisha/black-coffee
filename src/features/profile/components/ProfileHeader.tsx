@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next"
+import { safeExternalUrl } from "@/lib/safeUrl"
 import { Avatar } from "@/components/ui/Avatar"
 import { Button } from "@/components/ui/Button"
 import { Icon } from "@/components/ui/Icon"
@@ -25,6 +26,8 @@ export function ProfileHeader({
   onFollowToggle,
 }: ProfileHeaderProps) {
   const { t } = useTranslation()
+  // Values stored before the schema rejected script schemes still reach here.
+  const websiteHref = safeExternalUrl(user.website)
 
   return (
     <div>
@@ -87,15 +90,15 @@ export function ProfileHeader({
               {user.location}
             </span>
           )}
-          {user.website && (
+          {websiteHref && (
             <a
-              href={user.website}
+              href={websiteHref}
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-text focus-visible:ring-accent flex items-center gap-1.5 transition-colors hover:underline focus-visible:rounded-sm focus-visible:ring-2 focus-visible:outline-none motion-reduce:transition-none"
             >
               <Icon name="link" size={12} aria-hidden="true" />
-              {user.website.replace(/^https?:\/\//, "")}
+              {websiteHref.replace(/^https?:\/\//, "")}
             </a>
           )}
           {user.created_at && (

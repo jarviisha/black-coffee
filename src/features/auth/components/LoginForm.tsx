@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/Button"
 import { FormAlert } from "@/components/ui/FormAlert"
 import { useAuth } from "../hooks/useAuth"
 import { createLoginSchema, type LoginInput } from "../schemas"
-import { getApiErrorMessage } from "@/lib/utils"
+import { apiErrorMessage, getApiErrorStatus } from "@/lib/utils"
 import { AuthHeader } from "./AuthHeader"
 import { AuthSwitchLink } from "./AuthSwitchLink"
 import { PasswordField } from "./PasswordField"
@@ -29,7 +29,13 @@ export function LoginForm() {
     resolver: zodResolver(schema),
   })
 
-  const serverError = getApiErrorMessage(loginError)
+  // A 401 here is a wrong username or password, not an expired session, and the
+  // API answers it with a bare "Unauthorized" that means nothing to a user.
+  const serverError = !loginError
+    ? null
+    : getApiErrorStatus(loginError) === 401
+      ? t("auth.errors.invalidCredentials")
+      : apiErrorMessage(loginError, t("common.error"))
 
   const onSubmit = (data: LoginInput) => {
     login(data, { onSuccess: () => void navigate("/") })
