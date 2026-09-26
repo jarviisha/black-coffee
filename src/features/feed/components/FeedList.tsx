@@ -7,12 +7,14 @@ import { Spinner } from "@/components/ui/Spinner"
 import { Button } from "@/components/ui/Button"
 import { useAuthStore } from "@/store/authStore"
 import { useCursorPagination } from "@/hooks/useCursorPagination"
+import { useRewindOnPost } from "@/hooks/useRewindOnPost"
 import type { HandlerFeedItemResponse } from "@/api/models/handler/FeedItemResponse"
 
 export function FeedList() {
   const { t } = useTranslation()
   const isInitialized = useAuthStore((s) => s.isInitialized)
   const [cursor, setCursor] = useState<string | undefined>(undefined)
+  useRewindOnPost(setCursor)
 
   const { data, isLoading, isFetching, isError, refetch } = useGetFeed(
     cursor ? { cursor } : undefined,

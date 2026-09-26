@@ -87,7 +87,10 @@ export function EditProfilePage() {
 
   useEffect(() => {
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
-      if (isDirtyRef.current) e.preventDefault()
+      if (!isDirtyRef.current) return
+      e.preventDefault()
+      // Safari and older Chromium key the dialog off returnValue, not preventDefault.
+      e.returnValue = ""
     }
     window.addEventListener("beforeunload", onBeforeUnload)
     return () => window.removeEventListener("beforeunload", onBeforeUnload)
@@ -134,12 +137,9 @@ export function EditProfilePage() {
   const onSubmit = (values: EditProfileInput) => {
     updateProfile(
       {
-        data: {
-          display_name: values.display_name || undefined,
-          bio: values.bio || undefined,
-          location: values.location || undefined,
-          website: values.website || undefined,
-        },
+        // Sent as-is: mapping "" to undefined drops the key from the payload,
+        // and the API keeps the old value — so a field could never be cleared.
+        data: values,
       },
       {
         onSuccess: (updated) => {

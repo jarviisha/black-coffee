@@ -69,7 +69,7 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
         onError: (err) => {
           setIsLiked(!next)
           setLikeCount((c) => c + (next ? -1 : 1))
-          toast.error(apiErrorMessage(err, t("common.error")))
+          toast.error(apiErrorMessage(err, t("common.error"), { SELF_LIKE: t("comment.selfLike") }))
         },
       },
     )
@@ -122,13 +122,11 @@ export function CommentItem({ comment, postId, depth = 0 }: CommentItemProps) {
             </button>
           ) : (
             <span
-              className={cn(
-                "flex items-center gap-1 text-xs font-medium",
-                isLiked && "text-error",
-              )}
+              aria-label={t("comment.likeCount", { count: likeCount })}
+              className={cn("flex items-center gap-1 text-xs font-medium", isLiked && "text-error")}
             >
               <Icon name={isLiked ? "heart-fill" : "heart"} size={15} aria-hidden="true" />
-              {likeCount > 0 && <span>{formatCount(likeCount)}</span>}
+              {likeCount > 0 && <span aria-hidden="true">{formatCount(likeCount)}</span>}
             </span>
           )}
 

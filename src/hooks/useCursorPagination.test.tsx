@@ -214,10 +214,58 @@ describe("useCursorPagination", () => {
         onNextPage={onNextPage}
       />,
     )
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2")
+    activeObserver()!.trigger(true)
+    expect(onNextPage).toHaveBeenCalledWith("c3")
 
+    // Twice in a row is a loop, not a shifted window: stop asking.
+    onNextPage.mockClear()
+    rerender(
+      <PagedHarness
+        cursor="c3"
+        page={{ data: [{ id: "p1" }, { id: "p2" }], next_cursor: "c4" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
     expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2")
     activeObserver()!.trigger(true)
     expect(onNextPage).not.toHaveBeenCalled()
+  })
+
+  // A shifted window can legitimately repeat one page; only a server that keeps
+  // repeating is looping. Stopping on the first repeat strands the rest of the feed.
+  it("survives a single repeated page and resumes on the next one", () => {
+    const onNextPage = vi.fn()
+    const { rerender } = render(
+      <PagedHarness
+        cursor={undefined}
+        page={{ data: [{ id: "p1" }], next_cursor: "c2" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+
+    rerender(
+      <PagedHarness
+        cursor="c2"
+        page={{ data: [{ id: "p1" }], next_cursor: "c3" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+    activeObserver()!.trigger(true)
+    expect(onNextPage).toHaveBeenCalledWith("c3")
+
+    rerender(
+      <PagedHarness
+        cursor="c3"
+        page={{ data: [{ id: "p2" }], next_cursor: "c4" }}
+        isFetching={false}
+        onNextPage={onNextPage}
+      />,
+    )
+    expect(screen.getByTestId("ids")).toHaveTextContent("p1,p2")
   })
 
   it("keeps the new rows of a partially overlapping page", () => {

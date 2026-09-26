@@ -25,6 +25,28 @@ function DropdownHarness() {
   )
 }
 
+/** An unrelated field on the same page — the dropdown must keep its hands off it. */
+function DropdownWithSibling() {
+  const { open, setOpen, panelRef, triggerRef } = useDropdown()
+
+  return (
+    <div>
+      <input aria-label="Email" />
+      <button ref={triggerRef} onClick={() => setOpen((v) => !v)} aria-expanded={open}>
+        Open menu
+      </button>
+      {open && (
+        <div ref={panelRef}>
+          <div role="menu">
+            <button role="menuitem">First</button>
+            <button role="menuitem">Last</button>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 describe("useDropdown", () => {
   it("closes on Escape and hands focus back to the trigger", async () => {
     const user = userEvent.setup()
@@ -76,5 +98,25 @@ describe("useDropdown", () => {
     // No panel handler in this harness, so focus must stay where it was rather
     // than being yanked back to the first item by the entry shortcut.
     expect(screen.getByRole("menuitem", { name: "Second" })).toHaveFocus()
+  })
+
+  // The listener is on document, so without a focus guard an open dropdown
+  // swallows keys that belong to whatever the user is actually typing in.
+  it("leaves keys alone when focus has moved to an unrelated field", async () => {
+    const user = userEvent.setup()
+    render(<DropdownWithSibling />)
+
+    await user.click(screen.getByRole("button", { name: "Open menu" }))
+    const email = screen.getByRole("textbox", { name: "Email" })
+    email.focus()
+
+    await user.keyboard("{End}")
+    expect(email).toHaveFocus()
+
+    await user.keyboard("{ArrowDown}")
+    expect(email).toHaveFocus()
+
+    await user.keyboard("{Escape}")
+    expect(email).toHaveFocus()
   })
 })

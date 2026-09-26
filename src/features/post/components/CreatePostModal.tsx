@@ -334,7 +334,10 @@ export default function CreatePostModal({ onClose }: CreatePostModalProps) {
 
             <div className="flex items-center gap-3">
               <span
-                className={cn("text-xs", charCount > MAX_POST_CHARS ? "text-error" : "text-text-sub")}
+                className={cn(
+                  "text-xs",
+                  charCount > MAX_POST_CHARS ? "text-error" : "text-text-sub",
+                )}
               >
                 {charCount}/{MAX_POST_CHARS}
               </span>

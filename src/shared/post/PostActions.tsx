@@ -49,7 +49,9 @@ export function PostActions({
               className={TAP_TARGET}
             />
           ) : (
-            <span className={TAP_TARGET}>
+            // No button on your own post, so this static group has to carry the
+            // count itself — the icon and the digits are both aria-hidden.
+            <span className={TAP_TARGET} aria-label={t("post.likeCount", { count: likeCount })}>
               <Icon name={liked ? "heart-fill" : "heart"} size={20} />
             </span>
           )}

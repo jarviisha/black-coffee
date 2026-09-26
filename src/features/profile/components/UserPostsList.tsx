@@ -4,6 +4,7 @@ import { useGetUserPosts } from "@/api/hooks/useGetUserPosts"
 import { PostCard } from "@/shared/post/PostCard"
 import { Spinner } from "@/components/ui/Spinner"
 import { useCursorPagination } from "@/hooks/useCursorPagination"
+import { useRewindOnPost } from "@/hooks/useRewindOnPost"
 import type { DtoPostResponse } from "@/api/models/dto/PostResponse"
 
 type Post = DtoPostResponse
@@ -15,6 +16,7 @@ interface UserPostsListProps {
 export function UserPostsList({ userID }: UserPostsListProps) {
   const { t } = useTranslation()
   const [cursor, setCursor] = useState<string | undefined>(undefined)
+  useRewindOnPost(setCursor)
 
   const { data, isLoading, isFetching, isError } = useGetUserPosts(
     userID,

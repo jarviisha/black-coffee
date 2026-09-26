@@ -65,6 +65,18 @@ describe("apiErrorMessage", () => {
     expect(apiErrorMessage(err, "fallback")).toBe("you cannot like your own post")
   })
 
+  it("prefers a translated code over the API's English", () => {
+    const err = axiosErrorWith({
+      error: { code: "SELF_LIKE", message: "you cannot like your own post" },
+    })
+    expect(apiErrorMessage(err, "fallback", { SELF_LIKE: "localized" })).toBe("localized")
+  })
+
+  it("falls through to the server message for codes it has no wording for", () => {
+    const err = axiosErrorWith({ error: { code: "MYSTERY", message: "something specific" } })
+    expect(apiErrorMessage(err, "fallback", { SELF_LIKE: "localized" })).toBe("something specific")
+  })
+
   it("uses the caller's wording when there is no message to show", () => {
     expect(apiErrorMessage(new AxiosError("Network Error", "ERR_NETWORK"), "fallback")).toBe(
       "fallback",

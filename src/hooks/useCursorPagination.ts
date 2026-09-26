@@ -2,6 +2,9 @@ import { useState, useRef, useEffect, useCallback } from "react"
 
 type PageResult<T> = { data?: T[] | null; next_cursor?: string | null }
 
+/** Consecutive pages with nothing new before the list is treated as exhausted. */
+const DRY_PAGE_LIMIT = 2
+
 type UseCursorPaginationOptions<T> = {
   cursor: string | undefined
   onNextPage: (nextCursor: string) => void
@@ -25,6 +28,7 @@ export function useCursorPagination<T extends { id?: string }>({
   const [items, setItems] = useState<T[]>([])
   const fetchedKeys = useRef(new Set<string>())
   const seenIds = useRef(new Set<string>())
+  const dryPages = useRef(0)
   const nextCursorRef = useRef<string | undefined>(undefined)
   // Callback ref rather than an object ref: callers render the sentinel only
   // after the first page has been appended, so the observer effect must re-run
@@ -46,8 +50,7 @@ export function useCursorPagination<T extends { id?: string }>({
 
       // A server can hand back rows already served under a previous cursor —
       // rendering those again duplicates React keys and, because such a page
-      // still carries a next_cursor, scrolls forever. Drop the repeats, and
-      // treat a page with nothing new as the end of the list.
+      // still carries a next_cursor, scrolls forever.
       const fresh = incoming.filter((item) => {
         if (item.id === undefined) return true
         if (seenIds.current.has(item.id)) return false
@@ -55,9 +58,18 @@ export function useCursorPagination<T extends { id?: string }>({
         return true
       })
 
-      if (!isInitial && fresh.length === 0) {
-        nextCursorRef.current = undefined
-        return
+      if (isInitial) {
+        dryPages.current = 0
+      } else if (fresh.length === 0) {
+        // One repeat is normal when new rows shift the window; a second in a
+        // row means the cursor is not advancing, so stop rather than loop.
+        dryPages.current += 1
+        if (dryPages.current >= DRY_PAGE_LIMIT) {
+          nextCursorRef.current = undefined
+          return
+        }
+      } else {
+        dryPages.current = 0
       }
 
       setItems((prev) => (isInitial ? fresh : [...prev, ...fresh]))

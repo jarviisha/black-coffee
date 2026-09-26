@@ -39,7 +39,7 @@ export function useOptimisticLike({
           setLiked(!next)
           setLikeCount((c) => c + (next ? -1 : 1))
           // Without this the heart just flips back on its own, which reads as a bug.
-          toast.error(apiErrorMessage(err, t("common.error")))
+          toast.error(apiErrorMessage(err, t("common.error"), { SELF_LIKE: t("post.selfLike") }))
         },
       },
     )

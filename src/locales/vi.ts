@@ -167,6 +167,8 @@ const vi: Translations = {
     noReplies: "Chưa có phản hồi nào.",
     like: "Thích",
     unlike: "Bỏ thích",
+    likeCount: "{{count}} lượt thích",
+    selfLike: "Bạn không thể thích bình luận của chính mình.",
     viewReplies: "Xem {{count}} phản hồi",
     viewMoreReplies: "Xem thêm {{count}} phản hồi",
     hideReplies: "Ẩn phản hồi",
@@ -181,6 +183,8 @@ const vi: Translations = {
   post: {
     like: "Thích",
     unlike: "Bỏ thích",
+    likeCount: "{{count}} lượt thích",
+    selfLike: "Bạn không thể thích bài viết của chính mình.",
     comments: "{{count}} bình luận",
     notFound: "Không tìm thấy bài viết.",
     back: "Bài viết",
@@ -252,7 +256,7 @@ const vi: Translations = {
       websitePlaceholder: "https://website.com",
       save: "Lưu thay đổi",
       validation: {
-        displayNameMax: "Tên hiển thị tối đa 50 ký tự",
+        displayNameMax: "Tên hiển thị tối đa {{max}} ký tự",
         bioMax: "Tiểu sử tối đa {{max}} ký tự",
         locationMax: "Vị trí tối đa {{max}} ký tự",
         websiteInvalid: "Nhập một URL hợp lệ",

@@ -19,6 +19,13 @@ export function useDropdown() {
       }
     }
     const onKeyDown = (e: KeyboardEvent) => {
+      // The listener is on document, so anything it acts on must belong to this
+      // dropdown. Tab away and these keys are the page's again.
+      const active = document.activeElement
+      const onTrigger = triggerRef.current?.contains(active) ?? false
+      const insidePanel = panelRef.current?.contains(active) ?? false
+      if (!onTrigger && !insidePanel) return
+
       // Escape is the expected way out of an open popup; without it the only way
       // to dismiss is a pointer, which strands keyboard users inside the menu.
       if (e.key === "Escape") {
@@ -27,14 +34,12 @@ export function useDropdown() {
         return
       }
 
-      if (!ENTRY_KEYS.includes(e.key)) return
-      const panel = panelRef.current
       // Once focus is inside, the panel owns arrow navigation. This only covers
       // the first press, when focus is still on the trigger that opened it.
-      if (!panel || panel.contains(document.activeElement)) return
+      if (!ENTRY_KEYS.includes(e.key) || insidePanel) return
 
-      const items = panel.querySelectorAll<HTMLElement>(FOCUSABLE)
-      if (items.length === 0) return
+      const items = panelRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE)
+      if (!items || items.length === 0) return
       e.preventDefault()
       const fromBottom = e.key === "ArrowUp" || e.key === "End"
       items[fromBottom ? items.length - 1 : 0].focus()

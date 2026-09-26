@@ -1,6 +1,8 @@
 import { z } from "zod"
 import type { TFunction } from "i18next"
 
+const MAX_DISPLAY_NAME = 50
+
 // Login only checks for presence — length rules belong to register/reset,
 // and echoing them here would leak the password policy to anyone at the login screen.
 export function createLoginSchema(t: TFunction) {
@@ -16,7 +18,7 @@ export function createRegisterSchema(t: TFunction) {
       display_name: z
         .string()
         .min(1, t("auth.validation.required"))
-        .max(50, t("auth.validation.displayNameMax")),
+        .max(MAX_DISPLAY_NAME, t("auth.validation.displayNameMax", { max: MAX_DISPLAY_NAME })),
       username: z
         .string()
         .min(3, t("auth.validation.usernameMin"))

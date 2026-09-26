@@ -32,8 +32,11 @@ export function useSearchBar() {
   const showRecent = focused && query.trim() === "" && recent.length > 0
   const showSearch = focused && isSearching
   // One typed character gives no feedback at all otherwise — the dropdown just
-  // stays closed and the search looks broken.
-  const showMinLength = focused && query.trim().length > 0 && !isSearching
+  // stays closed and the search looks broken. Measured against the live query,
+  // not the debounced one, so the hint clears the moment a second character
+  // lands rather than lingering for the debounce window.
+  const typedLength = query.trim().length
+  const showMinLength = focused && typedLength > 0 && typedLength < 2
   const showDropdown = showRecent || showSearch || showMinLength
 
   // Close on outside click

@@ -165,6 +165,8 @@ const en = {
     noReplies: "No replies yet.",
     like: "Like",
     unlike: "Unlike",
+    likeCount: "{{count}} likes",
+    selfLike: "You can't like your own comment.",
     viewReplies: "View {{count}} replies",
     viewMoreReplies: "View {{count}} more replies",
     hideReplies: "Hide replies",
@@ -179,6 +181,8 @@ const en = {
   post: {
     like: "Like",
     unlike: "Unlike",
+    likeCount: "{{count}} likes",
+    selfLike: "You can't like your own post.",
     comments: "{{count}} comments",
     notFound: "Post not found.",
     back: "Post",
@@ -250,7 +254,7 @@ const en = {
       websitePlaceholder: "https://yoursite.com",
       save: "Save changes",
       validation: {
-        displayNameMax: "Display name must be at most 50 characters",
+        displayNameMax: "Display name must be at most {{max}} characters",
         bioMax: "Bio must be at most {{max}} characters",
         locationMax: "Location must be at most {{max}} characters",
         websiteInvalid: "Enter a valid URL",
